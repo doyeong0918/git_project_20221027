@@ -1,0 +1,221 @@
+:root {
+  --header-dark: #12210f;
+  --header-green: #2f5d1f;
+  --active-tab: #3c2f5f;
+  --tab-bar: #4b3b73;
+  --border: #dcdcdc;
+  --text: #222;
+  --text-sub: #666;
+  --max-width: 900px;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+}
+body {
+  min-height: 100vh;
+  font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif;
+  background: #f4f4f4;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 공통: 각 바(header/nav/footer)는 화면 폭 전체로 깔리고,
+   안쪽 콘텐츠만 max-width로 가운데 정렬되는 일반적인 반응형 웹 레이아웃
+   (앱 목업처럼 고정폭 프레임으로 감싸지 않음) */
+.header-inner, .tab-menu-inner, .content, .footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* 상단 헤더 (제목 영역) */
+.site-header {
+  background: linear-gradient(135deg, var(--header-dark), var(--header-green));
+  color: #fff;
+}
+.header-inner {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* 탭 메뉴 */
+.tab-menu {
+  background: var(--tab-bar);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tab-menu-inner {
+  display: flex;
+}
+.tab-link {
+  flex: 1;
+  padding: 14px 8px;
+  text-align: center;
+  text-decoration: none;
+  color: #d9d3ea;
+  font-size: 15px;
+  border-bottom: 3px solid transparent;
+}
+.tab-link.active {
+  background: var(--active-tab);
+  color: #fff;
+  border-bottom: 3px solid #ffffff;
+  font-weight: bold;
+}
+
+/* 본문: 폭이 넓어져도 계속 읽기 좋은 너비로 가운데 정렬 */
+main.page {
+  flex: 1;
+  background: #fff;
+  width: 100%;
+}
+.content {
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.content h2 {
+  margin: 0 0 14px;
+  font-size: 16px;
+  color: var(--header-green);
+  border-left: 4px solid var(--header-green);
+  padding-left: 8px;
+}
+
+.placeholder-box {
+  border: 1.5px dashed var(--border);
+  border-radius: 6px;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}
+
+/* 소개 화면: 사진 + 자기소개 텍스트 (넓은 화면에서는 좌우, 좁은 화면에서는 위아래) */
+.intro-block {
+  display: flex;
+  gap: 16px;
+}
+.photo-placeholder {
+  flex: 0 0 140px;
+  height: 160px;
+  border: 1.5px dashed var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-sub);
+  font-size: 13px;
+  overflow: hidden;
+}
+.photo-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.intro-block .placeholder-box {
+  flex: 1;
+  min-height: 160px;
+}
+.placeholder-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* 인적 화면 표 */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.info-table th, .info-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.info-table th {
+  width: 120px;
+  background: #f4f4f4;
+  color: var(--header-green);
+  font-weight: bold;
+  white-space: nowrap;
+}
+.info-table tr:last-child th,
+.info-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* 참조링크 구역 */
+.ref-links .link-grid {
+  display: flex;
+  gap: 12px;
+}
+.ref-links .link-box {
+  flex: 1;
+  height: 60px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: bold;
+  background: #fafafa;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ref-links .link-box:hover {
+  background: #f0f0f0;
+  border-color: var(--header-green);
+}
+
+/* 하단 푸터 */
+.site-footer {
+  background: var(--header-dark);
+  color: #cfcfcf;
+}
+.footer-inner {
+  text-align: center;
+  font-size: 12px;
+  padding: 16px;
+}
+
+/* ── 반응형 브레이크포인트 ── */
+
+/* 태블릿 이하: 여백을 살짝 줄임 */
+@media (max-width: 768px) {
+  .content { padding: 24px 18px; gap: 24px; }
+  .header-inner { padding: 32px 18px; font-size: 21px; }
+}
+
+/* 모바일: 탭 글자 축소, 자기소개 블록 세로 스택 */
+@media (max-width: 480px) {
+  .header-inner { padding: 24px 14px; font-size: 18px; }
+  .tab-link { font-size: 12px; padding: 12px 4px; }
+
+  .intro-block { flex-direction: column; }
+  .photo-placeholder { flex: 0 0 auto; width: 100%; height: 140px; }
+
+  .ref-links .link-grid { flex-direction: column; }
+  .ref-links .link-box { height: 48px; }
+
+  .info-table { font-size: 13px; }
+  .info-table th { width: 92px; padding: 10px; }
+  .info-table td { padding: 10px; }
+}
