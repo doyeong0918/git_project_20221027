@@ -160,6 +160,40 @@ main.page {
   border-bottom: none;
 }
 
+/* 아이디어 화면: 카테고리별 카드 목록 */
+.idea-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.idea-group h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--text);
+}
+.idea-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.idea-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  background: #fafafa;
+}
+.idea-title {
+  font-weight: bold;
+  color: var(--header-green);
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.idea-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+
 /* 참조링크 구역 */
 .ref-links .link-grid {
   display: flex;
