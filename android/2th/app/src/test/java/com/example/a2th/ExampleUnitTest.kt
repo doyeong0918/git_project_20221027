@@ -187,5 +187,12 @@ class ExampleUnitTest {
 
         println(result3)
 
+
+        for(i in 10 .. 13){
+            for(j in 5 .. 10){
+                print("$i * $j = ${i * j}\t")
+            }
+            println()
+        }
     }
 }
