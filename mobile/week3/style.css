@@ -127,40 +127,6 @@ main.page {
   padding: 20px;
 }
 
-/* 소개 화면: 사진 + 자기소개 텍스트 (넓은 화면에서는 좌우, 좁은 화면에서는 위아래) */
-.intro-block {
-  display: flex;
-  gap: 16px;
-}
-.photo-placeholder {
-  flex: 0 0 140px;
-  height: 160px;
-  border: 1.5px dashed var(--border);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-sub);
-  font-size: 13px;
-  overflow: hidden;
-}
-.photo-placeholder img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.intro-block .placeholder-box {
-  flex: 1;
-  min-height: 160px;
-}
-.placeholder-box img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  border-radius: 4px;
-}
-
 /* 인적 화면 표 */
 .info-table {
   width: 100%;
@@ -213,6 +179,38 @@ main.page {
   font-size: 14px;
 }
 .idea-desc {
+  font-size: 13px;
+  color: var(--text-sub);
+  line-height: 1.5;
+}
+
+/* 아이디어 화면: 참고 사이트 목록 */
+.ref-sites .ref-site-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ref-sites .ref-site-card {
+  display: block;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 16px;
+  background: #fafafa;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ref-sites .ref-site-card:hover {
+  background: #f0f0f0;
+  border-color: var(--header-green);
+}
+.ref-sites .ref-site-name {
+  font-weight: bold;
+  color: var(--header-green);
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+.ref-sites .ref-site-desc {
   font-size: 13px;
   color: var(--text-sub);
   line-height: 1.5;
@@ -322,9 +320,6 @@ main.page {
   .header-inner { padding: 24px 14px; font-size: 18px; }
   .tab-link { font-size: 12px; padding: 12px 4px; }
   .bgm-toggle { font-size: 11px; padding: 0 6px; }
-
-  .intro-block { flex-direction: column; }
-  .photo-placeholder { flex: 0 0 auto; width: 100%; height: 140px; }
 
   .ref-links .link-grid { flex-direction: column; }
   .ref-links .link-box { height: 48px; }
