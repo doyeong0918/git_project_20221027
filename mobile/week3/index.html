@@ -19,6 +19,8 @@
     <a href="academic.html" class="tab-link">학술</a>
     <a href="career.html" class="tab-link">경력</a>
     <a href="idea.html" class="tab-link">아이디어</a>
+    <a href="map.html" class="tab-link">지도</a>
+    <button type="button" id="bgm-toggle" class="bgm-toggle" aria-pressed="true">🔊 배경음악 끄기</button>
   </div>
 </nav>
 
@@ -35,8 +37,9 @@
     <section class="ref-links">
       <h2>참조링크</h2>
       <div class="link-grid">
-        <a class="link-box" href="https://www.naver.com" target="_blank" rel="noopener">NAVER</a>
-        <a class="link-box" href="https://www.google.com" target="_blank" rel="noopener">Google</a>
+        <a class="link-box" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
+        <a class="link-box" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a class="link-box" href="https://mail.google.com/" target="_blank" rel="noopener">Email</a>
       </div>
     </section>
   </div>
@@ -45,6 +48,69 @@
 <footer class="site-footer">
   <div class="footer-inner">Copyright © 0000 ○○○</div>
 </footer>
+
+<div id="bgm-player" class="bgm-player" aria-hidden="true"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  var BGM_VIDEO_ID = "gdZLi9oWNZg"; /* BTS - Dynamite Official MV (공식 채널) */
+  var bgmDesiredOn = true;
+  var bgmPlayer = null;
+  var bgmReady = false;
+  var bgmToggleBtn = document.getElementById("bgm-toggle");
+
+  function updateBgmButton() {
+    if (!bgmToggleBtn) return;
+    bgmToggleBtn.textContent = bgmDesiredOn ? "🔊 배경음악 끄기" : "🔇 배경음악 켜기";
+    bgmToggleBtn.setAttribute("aria-pressed", String(bgmDesiredOn));
+  }
+
+  function onYouTubeIframeAPIReady() {
+    bgmPlayer = new YT.Player("bgm-player", {
+      height: "1",
+      width: "1",
+      videoId: BGM_VIDEO_ID,
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        modestbranding: 1,
+        playsinline: 1,
+        loop: 1,
+        playlist: BGM_VIDEO_ID
+      },
+      events: {
+        onReady: function (e) {
+          bgmReady = true;
+          if (bgmDesiredOn) e.target.playVideo();
+        }
+      }
+    });
+  }
+
+  if (bgmToggleBtn) {
+    bgmToggleBtn.addEventListener("click", function () {
+      bgmDesiredOn = !bgmDesiredOn;
+      if (bgmReady) {
+        if (bgmDesiredOn) bgmPlayer.playVideo();
+        else bgmPlayer.pauseVideo();
+      }
+      updateBgmButton();
+    });
+  }
+
+  /* 브라우저 자동재생 정책으로 막힐 경우, 첫 클릭/키입력 시 재생 시도 */
+  ["click", "keydown", "touchstart"].forEach(function (evt) {
+    document.addEventListener(evt, function tryStartBgm() {
+      if (bgmReady && bgmDesiredOn && typeof bgmPlayer.getPlayerState === "function" && bgmPlayer.getPlayerState() !== 1) {
+        bgmPlayer.playVideo();
+      }
+    }, { once: true });
+  });
+
+  updateBgmButton();
+</script>
 
 </body>
 </html>

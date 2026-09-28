@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>홈페이지 템플릿 - 지도</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">홈페이지 제목 영역</div>
+</header>
+
+<nav class="tab-menu">
+  <div class="tab-menu-inner">
+    <a href="index.html" class="tab-link">소개</a>
+    <a href="personal.html" class="tab-link">인적</a>
+    <a href="academic.html" class="tab-link">학술</a>
+    <a href="career.html" class="tab-link">경력</a>
+    <a href="idea.html" class="tab-link">아이디어</a>
+    <a href="map.html" class="tab-link active">지도</a>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="content">
+    <section class="screen map-screen">
+      <h2>지도</h2>
+
+      <form class="map-search" id="map-search-form">
+        <input type="text" id="map-search-input" placeholder="가고 싶은 장소를 검색해보세요 (예: 수원역)" autocomplete="off">
+        <button type="submit">검색</button>
+        <button type="button" id="map-reset-btn">현재 위치</button>
+      </form>
+
+      <div class="map-frame">
+        <iframe
+          id="map-iframe"
+          src="https://maps.google.com/maps?q=%EC%9E%A5%EC%95%88%EB%8C%80%ED%95%99%EA%B5%90%20%EC%A0%95%EB%B3%B4%ED%86%B5%EC%8B%A0%EA%B4%80&output=embed"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <p class="map-location">현재 위치: <span id="map-location-text">경기도 화성시 봉담읍 장안대학교 정보통신관</span></p>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">Copyright © 0000 ○○○</div>
+</footer>
+
+<script>
+  var DEFAULT_MAP_QUERY = "장안대학교 정보통신관";
+  var DEFAULT_LOCATION_LABEL = "경기도 화성시 봉담읍 장안대학교 정보통신관";
+  var mapIframe = document.getElementById("map-iframe");
+  var searchForm = document.getElementById("map-search-form");
+  var searchInput = document.getElementById("map-search-input");
+  var resetBtn = document.getElementById("map-reset-btn");
+  var locationText = document.getElementById("map-location-text");
+
+  function showOnMap(query, label) {
+    mapIframe.src = "https://maps.google.com/maps?q=" + encodeURIComponent(query) + "&output=embed";
+    locationText.textContent = label;
+  }
+
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var query = searchInput.value.trim();
+    if (query) showOnMap(query, query);
+  });
+
+  resetBtn.addEventListener("click", function () {
+    searchInput.value = "";
+    showOnMap(DEFAULT_MAP_QUERY, DEFAULT_LOCATION_LABEL);
+  });
+</script>
+
+</body>
+</html>

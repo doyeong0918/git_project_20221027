@@ -69,6 +69,30 @@ body {
   font-weight: bold;
 }
 
+/* 배경음악 토글 버튼 */
+.bgm-toggle {
+  flex: 0 0 auto;
+  padding: 0 14px;
+  border: none;
+  background: transparent;
+  color: #d9d3ea;
+  font-size: 13px;
+  cursor: pointer;
+}
+.bgm-toggle:hover {
+  color: #fff;
+}
+.bgm-player {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* 본문: 폭이 넓어져도 계속 읽기 좋은 너비로 가운데 정렬 */
 main.page {
   flex: 1;
@@ -219,6 +243,61 @@ main.page {
   border-color: var(--header-green);
 }
 
+/* 지도 화면 */
+.map-location {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+.map-location #map-location-text {
+  color: var(--text);
+  font-weight: bold;
+}
+.map-search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.map-search input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.map-search button {
+  padding: 10px 14px;
+  border: 1px solid var(--header-green);
+  border-radius: 6px;
+  background: var(--header-green);
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.map-search button:hover {
+  opacity: 0.9;
+}
+.map-search #map-reset-btn {
+  background: #fff;
+  color: var(--header-green);
+}
+.map-frame {
+  width: 100%;
+  height: 480px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.map-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 /* 하단 푸터 */
 .site-footer {
   background: var(--header-dark);
@@ -242,6 +321,7 @@ main.page {
 @media (max-width: 480px) {
   .header-inner { padding: 24px 14px; font-size: 18px; }
   .tab-link { font-size: 12px; padding: 12px 4px; }
+  .bgm-toggle { font-size: 11px; padding: 0 6px; }
 
   .intro-block { flex-direction: column; }
   .photo-placeholder { flex: 0 0 auto; width: 100%; height: 140px; }
@@ -252,4 +332,8 @@ main.page {
   .info-table { font-size: 13px; }
   .info-table th { width: 92px; padding: 10px; }
   .info-table td { padding: 10px; }
+
+  .map-frame { height: 320px; }
+  .map-search { flex-wrap: wrap; }
+  .map-search input[type="text"] { flex: 1 1 100%; }
 }
