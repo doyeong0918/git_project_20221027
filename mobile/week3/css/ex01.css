@@ -1,0 +1,18 @@
+/* 기본: PC */
+body {
+    background-color: lightgreen;
+}
+
+/* 화면 너비가 768px 이하 */
+@media screen and (max-width: 768px) {
+    body {
+        background-color: beige;
+    }
+}
+
+/* 화면 너비가 480px 이하 */
+@media screen and (max-width: 500px) {
+    body {
+        background-color: purple;
+    }
+}

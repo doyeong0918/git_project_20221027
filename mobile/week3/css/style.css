@@ -53,6 +53,48 @@ body {
 .tab-menu-inner {
   display: flex;
 }
+/* 탭 하나 + 드롭다운 묶음 */
+.tab-item {
+  flex: 1;
+  position: relative;
+}
+.tab-item > .tab-link {
+  display: block;
+}
+.tab-item:hover > .tab-link,
+.tab-item:focus-within > .tab-link {
+  background: var(--active-tab);
+  color: #fff;
+}
+
+/* 드롭다운 메뉴: 평소엔 숨김, 탭에 마우스를 올리면(또는 키보드 포커스 시) 펼쳐짐 */
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  background: var(--active-tab);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+.tab-item:hover > .dropdown,
+.tab-item:focus-within > .dropdown {
+  display: block;
+}
+.dropdown a {
+  display: block;
+  padding: 10px 8px;
+  text-align: center;
+  text-decoration: none;
+  color: #d9d3ea;
+  font-size: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.dropdown a:hover {
+  background: var(--header-green);
+  color: #fff;
+}
+
 .tab-link {
   flex: 1;
   padding: 14px 8px;
@@ -319,6 +361,7 @@ main.page {
 @media (max-width: 480px) {
   .header-inner { padding: 24px 14px; font-size: 18px; }
   .tab-link { font-size: 12px; padding: 12px 4px; }
+  .dropdown a { font-size: 12px; padding: 10px 4px; }
   .bgm-toggle { font-size: 11px; padding: 0 6px; }
 
   .ref-links .link-grid { flex-direction: column; }

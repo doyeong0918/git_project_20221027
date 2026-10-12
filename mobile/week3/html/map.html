@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>홈페이지 템플릿 - 지도</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
@@ -14,12 +14,54 @@
 
 <nav class="tab-menu">
   <div class="tab-menu-inner">
-    <a href="index.html" class="tab-link">소개</a>
-    <a href="personal.html" class="tab-link">인적</a>
-    <a href="academic.html" class="tab-link">학술</a>
-    <a href="career.html" class="tab-link">경력</a>
-    <a href="idea.html" class="tab-link">아이디어</a>
-    <a href="map.html" class="tab-link active">지도</a>
+    <div class="tab-item">
+      <a href="index.html" class="tab-link">소개</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="personal.html" class="tab-link">인적</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="academic.html" class="tab-link">학술</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="career.html" class="tab-link">경력</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="idea.html" class="tab-link">아이디어</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="map.html" class="tab-link active">지도</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -53,31 +95,7 @@
   <div class="footer-inner">Copyright © 0000 ○○○</div>
 </footer>
 
-<script>
-  var DEFAULT_MAP_QUERY = "장안대학교 정보통신관";
-  var DEFAULT_LOCATION_LABEL = "경기도 화성시 봉담읍 장안대학교 정보통신관";
-  var mapIframe = document.getElementById("map-iframe");
-  var searchForm = document.getElementById("map-search-form");
-  var searchInput = document.getElementById("map-search-input");
-  var resetBtn = document.getElementById("map-reset-btn");
-  var locationText = document.getElementById("map-location-text");
-
-  function showOnMap(query, label) {
-    mapIframe.src = "https://maps.google.com/maps?q=" + encodeURIComponent(query) + "&output=embed";
-    locationText.textContent = label;
-  }
-
-  searchForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var query = searchInput.value.trim();
-    if (query) showOnMap(query, query);
-  });
-
-  resetBtn.addEventListener("click", function () {
-    searchInput.value = "";
-    showOnMap(DEFAULT_MAP_QUERY, DEFAULT_LOCATION_LABEL);
-  });
-</script>
+<script src="../js/map.js"></script>
 
 </body>
 </html>

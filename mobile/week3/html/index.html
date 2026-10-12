@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>홈페이지 템플릿 - 소개</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">홈페이지 제목 영역</div>
+</header>
+
+<nav class="tab-menu">
+  <div class="tab-menu-inner">
+    <div class="tab-item">
+      <a href="index.html" class="tab-link active">소개</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="personal.html" class="tab-link">인적</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="academic.html" class="tab-link">학술</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="career.html" class="tab-link">경력</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="idea.html" class="tab-link">아이디어</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <div class="tab-item">
+      <a href="map.html" class="tab-link">지도</a>
+      <div class="dropdown">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+      </div>
+    </div>
+    <button type="button" id="bgm-toggle" class="bgm-toggle" aria-pressed="true">🔊 배경음악 끄기</button>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="content">
+    <section class="intro">
+      <h2>자기소개</h2>
+    </section>
+
+    <section class="ref-links">
+      <h2>참조링크</h2>
+      <div class="link-grid">
+        <a class="link-box" data-brand="youtube" aria-label="YouTube" href="https://www.youtube.com/" target="_blank" rel="noopener">YouTube</a>
+        <a class="link-box" data-brand="instagram" aria-label="Instagram" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a class="link-box" data-brand="github" aria-label="GitHub" href="https://github.com/doyeong0918" target="_blank" rel="noopener">GitHub</a>
+        <a class="link-box" data-brand="gmail" aria-label="Email" href="https://mail.google.com/" target="_blank" rel="noopener">Email</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">Copyright © 0000 ○○○</div>
+</footer>
+
+<div id="bgm-player" class="bgm-player" aria-hidden="true"></div>
+
+<script src="../js/mouseevent.js"></script>
+<script src="../js/bgm.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+</body>
+</html>
