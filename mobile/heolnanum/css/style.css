@@ -185,6 +185,7 @@ main.page { flex: 1; width: 100%; }
 }
 .notice strong { color: var(--red-dark); }
 .card { border: 1px solid var(--line); border-radius: var(--r-md); padding: 1rem 1.15rem; background: #fff; }
+#req-gate:not(:empty) { margin-bottom: 1rem; }
 .empty { border: 2px dashed var(--line); border-radius: var(--r-md); padding: 1.6rem 1rem; text-align: center; color: var(--ink-sub); font-size: 0.9rem; }
 
 /* ── 폼 ── */
@@ -201,6 +202,44 @@ main.page { flex: 1; width: 100%; }
 .form-actions { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .form-msg { margin: 0.7rem 0 0; font-size: 0.88rem; color: var(--lv1); min-height: 1.2em; font-weight: 700; }
 .form-msg.error { color: var(--lv4); }
+
+/* ── 로그인 / 회원가입 ── */
+.content > section.auth-section { width: 100%; max-width: 32rem; margin: 0 auto; }
+.form-grid.one-col { grid-template-columns: 1fr; }
+.auth-section .form-actions .btn { flex: 1; }
+.auth-switch { margin: 1.2rem 0 0; padding-top: 1.1rem; border-top: 1px solid var(--line); text-align: center; font-size: 0.9rem; color: var(--ink-sub); }
+.auth-switch a { font-weight: 800; }
+.auth-links { display: flex; align-items: center; gap: 0.75rem; }
+.auth-user { color: #fff; font-weight: 700; }
+
+/* ── 게시판 ── */
+.board-toolbar { display: flex; gap: 0.6rem; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 0.9rem; }
+.board-toolbar .chips { margin-bottom: 0; }
+.chips a.chip { text-decoration: none; }
+.chip.on { border-color: var(--red); background: var(--red-soft); color: var(--red-dark); }
+.board-search { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.board-search input[type="search"] { flex: 1; min-width: 0; padding: 0.7rem 1rem; border: 1px solid #cfd4df; border-radius: 999px; font: inherit; }
+.board-count { margin: 0 0 0.5rem; font-size: 0.82rem; color: var(--ink-sub); }
+.board-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.board-row { display: flex; align-items: center; gap: 0.8rem; padding: 0.85rem 0.3rem; border-bottom: 1px solid var(--line); }
+.board-title { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.55rem; color: var(--ink); text-decoration: none; font-weight: 700; }
+.board-title .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.board-title:hover .t { color: var(--red); text-decoration: underline; }
+.board-meta { flex: none; font-size: 0.8rem; color: var(--ink-sub); }
+.board-list .empty { margin-top: 0.8rem; }
+.pager { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.3rem; margin-top: 1.3rem; }
+.pager a, .pager span { min-width: 2.2rem; padding: 0.4rem 0.75rem; text-align: center; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--ink-sub); font-size: 0.85rem; font-weight: 700; text-decoration: none; }
+.pager a:hover { border-color: var(--red); color: var(--red); }
+.pager .cur { background: var(--red); border-color: var(--red); color: #fff; }
+.pager .off { opacity: 0.4; }
+.post-head { padding-bottom: 1rem; margin-bottom: 1.2rem; border-bottom: 1px solid var(--line); }
+.post-head h2 { margin: 0.6rem 0 0.4rem; word-break: break-word; }
+.post-meta { font-size: 0.85rem; color: var(--ink-sub); }
+.post-body { min-height: 6rem; white-space: pre-wrap; word-break: break-word; line-height: 1.8; }
+.post-actions { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.post-actions .owner { display: flex; gap: 0.5rem; }
+#write-gate:not(:empty), #post-gate:not(:empty) { margin-bottom: 1rem; }
+#write-form textarea { min-height: 14rem; }
 
 /* ── 홈: 슬라이드 배너 (혈액관리본부의 비주얼 배너 구조를 참고) ── */
 .hero-carousel { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow); }
@@ -457,6 +496,8 @@ details p { margin: 0; padding: 0 1.1rem 1rem; font-size: 0.9rem; line-height: 1
   .map-frame { height: 21rem; }
   .map-search { flex-wrap: wrap; }
   .map-search input[type="text"] { flex: 1 1 100%; }
+  .board-row { flex-wrap: wrap; gap: 0.2rem 0.8rem; }
+  .board-title { flex-basis: 100%; }
   .notice-list li { flex-wrap: wrap; }
   .notice-list .title { flex-basis: 100%; order: 3; }
   .section-tabs a { min-width: 6rem; padding: 0.8rem 0.6rem; font-size: 0.88rem; }

@@ -1,5 +1,5 @@
 /* 모든 페이지 공통: 유틸바·헤더·메뉴·페이지 히어로·푸터 렌더링 + 저장/날짜 도우미
-   → 메뉴를 추가/수정할 땐 NAV_ITEMS 한 곳만 고치면 됨 (게시판·로그인은 여기와 UTILITY 영역에 추가 예정) */
+   → 메뉴를 추가/수정할 땐 NAV_ITEMS 한 곳만 고치면 됨 */
 var SITE_NAME = "헌혈나눔";
 var SITE_TAGLINE = "헌혈증은 나누고, 헌혈 주기는 챙기고";
 
@@ -13,8 +13,16 @@ var NAV_ITEMS = [
     sub: [["혈액형별 보유량", "#stock"], ["공식 현황", "#official"]] },
   { id: "info",   href: "info.html",   label: "헌혈 정보", title: "헌혈 정보", tagline: "헌혈 전에 알아두면 좋은 이야기",
     sub: [["헌혈 종류", "#types"], ["전후 팁", "#tips"], ["자주 묻는 질문", "#faq"]] },
+  { id: "board",  href: "board.html",  label: "게시판", title: "게시판", tagline: "헌혈 후기와 궁금한 점을 함께 나눠요",
+    sub: [["글 목록", "#list"]] },
   { id: "map",    href: "map.html",    label: "지도", title: "헌혈의집 찾기", tagline: "가까운 헌혈의집을 지도에서 찾아보세요",
     sub: [["헌혈의집 찾기", "#find"]] }
+];
+
+/* 메뉴에는 안 넣지만 페이지 히어로(제목 띠)는 필요한 페이지 */
+var EXTRA_PAGES = [
+  { id: "login",  label: "로그인",   title: "로그인",   tagline: "헌혈 기록과 기부 약속을 내 계정으로 관리해요", sub: [] },
+  { id: "signup", label: "회원가입", title: "회원가입", tagline: "이메일 하나로 헌혈나눔을 시작해 보세요",       sub: [] }
 ];
 
 var RELATED_SITES = [
@@ -118,7 +126,7 @@ function buildUtilityBar() {
     '<button type="button" data-fs-btn="sm" aria-label="글자 작게">가-</button>' +
     '<button type="button" data-fs-btn="md" aria-label="글자 기본">가</button>' +
     '<button type="button" data-fs-btn="lg" aria-label="글자 크게">가+</button></div>' +
-    '<a href="#" data-soon="로그인">로그인</a><a href="#" data-soon="회원가입">회원가입</a></div></div>';
+    '<span class="auth-links" id="auth-links"><a href="login.html">로그인</a><a href="signup.html">회원가입</a></span></div></div>';
 }
 
 function buildHeader(page) {
@@ -143,7 +151,7 @@ function buildHeader(page) {
 }
 
 function buildPageHero(page) {
-  var item = NAV_ITEMS.filter(function (it) { return it.id === page; })[0];
+  var item = NAV_ITEMS.concat(EXTRA_PAGES).filter(function (it) { return it.id === page; })[0];
   if (!item || !item.title) return "";
   var hero = '<section class="page-hero"><div class="inner">' +
     '<div class="crumbs"><a href="index.html" aria-label="홈">' + iconSvg("home") + '</a>' + iconSvg("chevron") + "<span>" + item.label + "</span></div>" +
@@ -201,7 +209,7 @@ function initLayout() {
     burger.innerHTML = iconSvg(open ? "close" : "menu");
   });
 
-  /* 아직 만들지 않은 기능(로그인 등) */
+  /* 아직 만들지 않은 기능(이용약관 등) */
   document.querySelectorAll("[data-soon]").forEach(function (a) {
     a.addEventListener("click", function (e) {
       e.preventDefault();

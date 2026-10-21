@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헌혈나눔 - 기부 매칭</title>
 <link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
+<script src="js/supabase-config.js" defer></script>
 <script src="js/common.js" defer></script>
+<script src="js/auth.js" defer></script>
+<script src="js/db.js" defer></script>
 <script src="js/data.js" defer></script>
 <script src="js/match.js" defer></script>
 </head>
@@ -26,8 +30,8 @@
       </ol>
       <p class="hint">위 내용은 한국백혈병어린이재단의 헌혈증 기증 안내를 참고해 정리한 일반 가이드예요. 기관마다 기준이 다를 수 있으니 실제로 보내기 전에 해당 기관 안내를 확인하세요.</p>
       <div class="notice" style="margin-top:1rem">
-        <strong>안내</strong> · 아래 요청은 화면 구성을 보여주기 위한 <strong>예시 데이터</strong>이고, 기부 약속은 이 브라우저에만 저장돼요.
-        실제 서비스에서는 로그인과 요청 검수(증빙 확인)를 거친 요청만 공개할 예정이에요.
+        <strong>안내</strong> · 아래 요청은 화면 구성을 보여주기 위한 <strong>예시 데이터</strong>예요.
+        실제 서비스에서는 요청 검수(증빙 확인)를 거친 요청만 공개할 예정이에요.
       </div>
     </section>
 
@@ -58,6 +62,7 @@
     <section id="request-form">
       <h2>도움 요청하기</h2>
       <p class="lead" style="margin-bottom:1rem">헌혈증이 필요하다면 요청을 남겨 주세요. 접수된 요청은 <strong>검수 후</strong> 목록에 공개돼요. 병원·환자의 실명 등 개인정보는 적지 마세요.</p>
+      <div id="req-gate"></div>
       <form id="req-form" class="card" novalidate>
         <div class="form-grid">
           <div class="field">

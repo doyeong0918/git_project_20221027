@@ -1,7 +1,5 @@
 /* 여러 페이지가 함께 쓰는 예시 데이터와 부품 (common.js 다음에 로드)
    → 실제 데이터(서버·공공 API)가 생기면 이 파일의 값만 교체하면 됨 */
-var PLEDGE_KEY = "hn_pledges";
-var MYREQ_KEY = "hn_myrequests";
 var MYTYPE_KEY = "hn_mytype";
 
 /* 화면 구성용 예시 데이터 — 실제 사람·병원이 아님 */

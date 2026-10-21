@@ -31,24 +31,32 @@
   updatePauseBtn();
   start();
 
-  /* ── 나눔 수치 / 긴급 요청 ── */
-  var pledges = loadJson(PLEDGE_KEY, []);
-  var open = 0, done = 0, got = 0;
-  REQUESTS_SEED.forEach(function (r) {
-    var g = gotOf(r, pledges);
-    got += g;
-    if (g >= r.need) done++; else open++;
-  });
-  document.getElementById("hs-open").textContent = open;
-  document.getElementById("hs-got").textContent = got;
-  document.getElementById("hs-done").textContent = done;
+  /* ── 나눔 수치 / 긴급 요청 (로그인했다면 내 기부 약속까지 합산 — 기부 매칭 페이지와 같은 기준) ── */
+  function renderShare(pledges) {
+    var open = 0, done = 0, got = 0;
+    REQUESTS_SEED.forEach(function (r) {
+      var g = gotOf(r, pledges);
+      got += g;
+      if (g >= r.need) done++; else open++;
+    });
+    document.getElementById("hs-open").textContent = open;
+    document.getElementById("hs-got").textContent = got;
+    document.getElementById("hs-done").textContent = done;
 
-  var urgent = REQUESTS_SEED.filter(function (r) { return r.urgency === "high" && gotOf(r, pledges) < r.need; })
-    .sort(function (a, b) { return (a.need - gotOf(a, pledges)) - (b.need - gotOf(b, pledges)); })
-    .slice(0, 3);
-  document.getElementById("urgent-list").innerHTML = urgent.length
-    ? urgent.map(function (r) { return requestCardHtml(r, pledges, "link"); }).join("")
-    : '<div class="empty" style="grid-column:1/-1">지금은 긴급 요청이 없어요.</div>';
+    var urgent = REQUESTS_SEED.filter(function (r) { return r.urgency === "high" && gotOf(r, pledges) < r.need; })
+      .sort(function (a, b) { return (a.need - gotOf(a, pledges)) - (b.need - gotOf(b, pledges)); })
+      .slice(0, 3);
+    document.getElementById("urgent-list").innerHTML = urgent.length
+      ? urgent.map(function (r) { return requestCardHtml(r, pledges, "link"); }).join("")
+      : '<div class="empty" style="grid-column:1/-1">지금은 긴급 요청이 없어요.</div>';
+  }
+  renderShare([]);
+  currentUser().then(function (user) {
+    return user ? dbListPledges() : null;
+  }).then(function (rows) {
+    if (rows) renderShare(rows);
+  }).catch(function () { /* 불러오지 못하면 기본 수치를 그대로 둔다 */ });
+  document.addEventListener("hn:signout", function () { renderShare([]); });
 
   /* ── 혈액 보유 / 새소식 ── */
   renderStockDash(document.getElementById("stock-dash"));

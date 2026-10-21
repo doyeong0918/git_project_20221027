@@ -1,12 +1,15 @@
 /* 헌혈증 기부 매칭: 예시 요청 목록 + 필터/정렬 + 기부 약속 + 도움 요청 접수
-   (백엔드가 생기기 전까지는 localStorage에 저장) */
-var pledges = loadJson(PLEDGE_KEY, []);
-var myRequests = loadJson(MYREQ_KEY, []);
+   (기부 약속·도움 요청은 로그인한 계정의 DB에 저장 → db.js. 요청 목록 보기는 로그인 없이도 가능) */
+var pledges = [];
+var myRequests = [];
+var signedIn = false;
 
 var listEl = document.getElementById("request-list");
 var pledgeListEl = document.getElementById("pledge-list");
 var myReqListEl = document.getElementById("myreq-list");
 var msgEl = document.getElementById("match-msg");
+var reqGateEl = document.getElementById("req-gate");
+var reqForm = document.getElementById("req-form");
 var filterRegion = document.getElementById("filter-region");
 var filterUrgency = document.getElementById("filter-urgency");
 var filterSort = document.getElementById("filter-sort");
@@ -18,7 +21,11 @@ var donateError = document.getElementById("df-error");
 var donateCount = document.getElementById("df-count");
 var donateNick = document.getElementById("df-nick");
 var donateMsg = document.getElementById("df-msg");
+var donateBtn = donateForm.querySelector('button[type="submit"]');
 var currentRequestId = null;
+
+var LOGIN_LINK = '<a href="' + loginHref() + '">로그인</a>';
+var LOADING_LI = '<li class="empty" style="display:block">불러오는 중…</li>';
 
 /* 지역 select 채우기 */
 var rfRegion = document.getElementById("rf-region");
@@ -49,7 +56,8 @@ function renderRequests() {
 
 function renderPledges() {
   if (!pledges.length) {
-    pledgeListEl.innerHTML = '<li class="empty" style="display:block">아직 기부 약속이 없어요. 위 목록에서 기부해 보세요.</li>';
+    pledgeListEl.innerHTML = '<li class="empty" style="display:block">' +
+      (signedIn ? "아직 기부 약속이 없어요. 위 목록에서 기부해 보세요." : "로그인하면 내 기부 약속을 볼 수 있어요. " + LOGIN_LINK) + "</li>";
     return;
   }
   pledgeListEl.innerHTML = pledges.slice().reverse().map(function (p) {
@@ -62,7 +70,8 @@ function renderPledges() {
 
 function renderMyRequests() {
   if (!myRequests.length) {
-    myReqListEl.innerHTML = '<li class="empty" style="display:block">접수한 요청이 없어요.</li>';
+    myReqListEl.innerHTML = '<li class="empty" style="display:block">' +
+      (signedIn ? "접수한 요청이 없어요." : "로그인하면 내가 접수한 요청을 볼 수 있어요. " + LOGIN_LINK) + "</li>";
     return;
   }
   myReqListEl.innerHTML = myRequests.slice().reverse().map(function (r) {
@@ -74,8 +83,52 @@ function renderMyRequests() {
   }).join("");
 }
 
+function renderMine() {
+  renderRequests();
+  renderPledges();
+  renderMyRequests();
+}
+
 function showMsg(text) {
+  msgEl.className = "form-msg";
   msgEl.textContent = text;
+}
+
+function setRequestFormEnabled(on) {
+  reqForm.querySelectorAll("input, select, textarea, button").forEach(function (el) { el.disabled = !on; });
+}
+
+/* 로그인 상태를 확인하고 내 기부 약속·도움 요청을 DB에서 불러온다 (로그아웃하면 다시 호출해 비움) */
+function loadMine() {
+  pledges = [];
+  myRequests = [];
+  signedIn = false;
+  reqGateEl.innerHTML = "";
+  setRequestFormEnabled(false);
+  renderRequests();
+
+  var unavailable = authUnavailableMessage();
+  if (unavailable) {
+    reqGateEl.innerHTML = noticeHtml(unavailable);
+    renderMine();
+    return;
+  }
+  pledgeListEl.innerHTML = LOADING_LI;
+  myReqListEl.innerHTML = LOADING_LI;
+  currentUser().then(function (user) {
+    if (!user) {
+      reqGateEl.innerHTML = loginNoticeHtml("도움 요청을 남기려면");
+      return;
+    }
+    return Promise.all([dbListPledges(), dbListMyRequests()]).then(function (res) {
+      pledges = res[0];
+      myRequests = res[1];
+      signedIn = true;
+      setRequestFormEnabled(true);
+    });
+  }).catch(function (err) {
+    reqGateEl.innerHTML = noticeHtml(dbErrorText(err));
+  }).then(renderMine);
 }
 
 /* ── 이벤트 ── */
@@ -86,6 +139,14 @@ function showMsg(text) {
 listEl.addEventListener("click", function (e) {
   var btn = e.target.closest("[data-donate]");
   if (!btn) return;
+  if (!signedIn) {
+    var unavailable = authUnavailableMessage();
+    msgEl.className = "form-msg error";
+    if (unavailable) msgEl.textContent = unavailable;
+    else msgEl.innerHTML = "기부 약속을 남기려면 " + LOGIN_LINK + "이 필요해요.";
+    showToast("기부하려면 로그인이 필요해요");
+    return;
+  }
   var req = findRequest(btn.getAttribute("data-donate"));
   var remain = req.need - gotOf(req, pledges);
   currentRequestId = req.id;
@@ -107,26 +168,39 @@ donateForm.addEventListener("submit", function (e) {
   if (!nick) { donateError.textContent = "닉네임을 입력해 주세요."; return; }
   if (!(count >= 1) || count > remain) { donateError.textContent = "기부 장수는 1장 이상, " + remain + "장 이하로 입력해 주세요."; return; }
 
-  pledges.push({ id: newId(), reqId: req.id, nick: nick, count: count, msg: donateMsg.value.trim(), at: toDateStr(new Date()) });
-  saveJson(PLEDGE_KEY, pledges);
-  dialog.close();
-  donateMsg.value = "";
-  renderRequests();
-  renderPledges();
-  showMsg(req.alias + "에게 " + count + "장 기부를 약속했어요. 고마워요! (실제 전달은 로그인 연동 후 지원)");
+  donateBtn.disabled = true;
+  dbAddPledge({ reqId: req.id, nick: nick, count: count, msg: donateMsg.value.trim() }).then(function (p) {
+    pledges.push(p);
+    dialog.close();
+    donateMsg.value = "";
+    renderRequests();
+    renderPledges();
+    showMsg(req.alias + "에게 " + count + "장 기부를 약속했어요. 고마워요!");
+  }).catch(function (err) {
+    donateError.textContent = dbErrorText(err);
+  }).then(function () {
+    donateBtn.disabled = false;
+  });
 });
 
 pledgeListEl.addEventListener("click", function (e) {
   var btn = e.target.closest("[data-cancel]");
   if (!btn) return;
-  pledges = pledges.filter(function (p) { return p.id !== btn.getAttribute("data-cancel"); });
-  saveJson(PLEDGE_KEY, pledges);
-  renderRequests();
-  renderPledges();
+  var id = btn.getAttribute("data-cancel");
+  btn.disabled = true;
+  dbDeletePledge(id).then(function () {
+    pledges = pledges.filter(function (p) { return p.id !== id; });
+    renderRequests();
+    renderPledges();
+  }).catch(function (err) {
+    btn.disabled = false;
+    showToast(dbErrorText(err));
+  });
 });
 
-document.getElementById("req-form").addEventListener("submit", function (e) {
+reqForm.addEventListener("submit", function (e) {
   e.preventDefault();
+  if (!signedIn) return;
   var msg = document.getElementById("rf-msg");
   var alias = document.getElementById("rf-alias").value.trim();
   var need = parseInt(document.getElementById("rf-need").value, 10);
@@ -134,28 +208,40 @@ document.getElementById("req-form").addEventListener("submit", function (e) {
   if (!alias) { msg.textContent = "표시 이름을 입력해 주세요."; return; }
   if (!(need >= 1 && need <= 100)) { msg.textContent = "필요한 장수는 1~100 사이로 입력해 주세요."; return; }
 
-  myRequests.push({
-    id: newId(), alias: alias, need: need,
+  var submit = reqForm.querySelector('button[type="submit"]');
+  submit.disabled = true;
+  dbAddRequest({
+    alias: alias, need: need,
     region: rfRegion.value,
     reason: document.getElementById("rf-reason").value,
-    story: document.getElementById("rf-story").value.trim(),
-    at: toDateStr(new Date())
+    story: document.getElementById("rf-story").value.trim()
+  }).then(function (r) {
+    myRequests.push(r);
+    reqForm.reset();
+    renderMyRequests();
+    msg.className = "form-msg";
+    msg.textContent = "요청이 접수됐어요. 검수가 끝나면 목록에 공개돼요.";
+  }).catch(function (err) {
+    msg.className = "form-msg error";
+    msg.textContent = dbErrorText(err);
+  }).then(function () {
+    submit.disabled = !signedIn;
   });
-  saveJson(MYREQ_KEY, myRequests);
-  e.target.reset();
-  renderMyRequests();
-  msg.className = "form-msg";
-  msg.textContent = "요청이 접수됐어요. 검수가 끝나면 목록에 공개돼요. (현재는 화면 데모)";
 });
 
 myReqListEl.addEventListener("click", function (e) {
   var btn = e.target.closest("[data-delreq]");
   if (!btn) return;
-  myRequests = myRequests.filter(function (r) { return r.id !== btn.getAttribute("data-delreq"); });
-  saveJson(MYREQ_KEY, myRequests);
-  renderMyRequests();
+  var id = btn.getAttribute("data-delreq");
+  btn.disabled = true;
+  dbDeleteRequest(id).then(function () {
+    myRequests = myRequests.filter(function (r) { return r.id !== id; });
+    renderMyRequests();
+  }).catch(function (err) {
+    btn.disabled = false;
+    showToast(dbErrorText(err));
+  });
 });
 
-renderRequests();
-renderPledges();
-renderMyRequests();
+document.addEventListener("hn:signout", loadMine);
+loadMine();
