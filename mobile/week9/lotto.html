@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>로또 번호 생성기</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh; margin: 0; padding: clamp(14px, 4vw, 32px); display: grid; place-items: center;
+      background: #f1f5f9; color: #172033; font-family: Arial, "Malgun Gothic", sans-serif;
+    }
+    main {
+      width: min(100%, 680px); padding: clamp(20px, 5vw, 36px); border: 1px solid #e2e8f0;
+      border-radius: 24px; background: white; text-align: center;
+      box-shadow: 0 20px 50px #0f172a18;
+    }
+    h1 { margin: 0; font-size: 2rem; }
+    .description { margin: 10px 0 26px; color: #64748b; line-height: 1.6; }
+    .result-label { margin: 0 0 12px; color: #475569; font-size: .9rem; font-weight: 700; }
+    .balls { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); justify-items: center; gap: clamp(6px, 2vw, 12px); }
+    .ball {
+      width: min(100%, 58px); aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%;
+      background: #e2e8f0; color: #334155; font-size: 1.25rem; font-weight: 800;
+      box-shadow: inset 0 -4px 0 #00000012; transition: transform .2s;
+    }
+    .ball.rolling { animation: bounce .22s ease-in-out infinite alternate; }
+    @keyframes bounce { to { transform: translateY(-7px) rotate(12deg); } }
+    .bonus {
+      display: flex; align-items: center; justify-content: center; gap: 14px;
+      margin: 22px auto 0; padding-top: 18px; border-top: 1px solid #e2e8f0;
+    }
+    .bonus .ball { width: 58px; flex: 0 0 58px; }
+    .plus { color: #94a3b8; font-size: 1.5rem; font-weight: 800; }
+    .controls { display: flex; justify-content: center; gap: 10px; margin-top: 26px; }
+    button {
+      min-height: 48px; padding: 0 20px; border: 0; border-radius: 12px;
+      font: inherit; font-weight: 700; cursor: pointer;
+    }
+    button:focus-visible { outline: 3px solid #818cf8; outline-offset: 3px; }
+    button:disabled { cursor: wait; opacity: .6; }
+    #draw-button { background: #4f46e5; color: white; }
+    #reset-button { background: #e2e8f0; color: #334155; }
+    .info { margin: 20px 0 0; color: #64748b; }
+    #status { min-height: 24px; margin: 12px 0 0; color: #4f46e5; font-weight: 700; }
+    .analysis { margin-top: 32px; padding-top: 28px; border-top: 1px solid #e2e8f0; text-align: left; }
+    .analysis h2 { margin: 0; text-align: center; font-size: 1.4rem; }
+    .analysis-intro { margin: 8px 0 20px; color: #64748b; text-align: center; font-size: .9rem; line-height: 1.6; }
+    .analysis-summary { margin-bottom: 16px; padding: 12px 14px; border-radius: 12px; background: #eef2ff; color: #3730a3; font-weight: 700; text-align: center; }
+    .frequency-chart { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 8px 16px; }
+    .frequency-row { display: grid; grid-template-columns: 30px minmax(40px, 1fr) auto; align-items: center; gap: 9px; min-width: 0; }
+    .frequency-number { display: grid; width: 28px; aspect-ratio: 1; place-items: center; border-radius: 50%; color: #fff; font-size: .78rem; font-weight: 800; }
+    .frequency-row:nth-child(-n+3) .frequency-number { outline: 2px solid #f59e0b; outline-offset: 2px; }
+    .bar-track { height: 12px; overflow: hidden; border-radius: 99px; background: #e2e8f0; }
+    .bar { height: 100%; border-radius: inherit; background: #6366f1; }
+    .frequency-row:nth-child(-n+3) .bar { background: #f59e0b; }
+    .frequency-value { min-width: 72px; color: #475569; font-size: .76rem; text-align: right; white-space: nowrap; }
+    .analysis-note { margin: 18px 0 0; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; color: #475569; font-size: .82rem; line-height: 1.65; }
+    .analysis-source { margin: 12px 0 0; color: #64748b; text-align: center; font-size: .75rem; }
+    .analysis-source a { color: #4f46e5; text-underline-offset: 2px; }
+    @media (max-width: 480px) {
+      main { border-radius: 18px; }
+      h1 { font-size: clamp(1.6rem, 8vw, 2rem); }
+      .balls { grid-template-columns: repeat(3, minmax(0, 58px)); justify-content: center; }
+      .ball { font-size: 1.1rem; }
+      .bonus { margin-top: 18px; }
+      .controls { flex-direction: column; }
+      button { width: 100%; }
+      .analysis { margin-top: 26px; padding-top: 22px; }
+      .frequency-chart { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>로또 번호 생성기</h1>
+    <p class="description">번호 6개와 보너스 번호를 추첨합니다.</p>
+    <p class="result-label">당첨 번호</p>
+    <div id="balls" class="balls" aria-label="추첨된 로또 번호 6개"></div>
+    <div class="bonus" aria-label="보너스 번호">
+      <span class="plus" aria-hidden="true">+</span>
+      <div>
+        <p class="result-label">보너스 번호</p>
+        <span id="bonus-ball" class="ball">?</span>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="draw-button" type="button">번호 뽑기</button>
+      <button id="reset-button" type="button">초기화</button>
+    </div>
+    <p class="info">생성 횟수: <strong id="count">0</strong>회</p>
+    <p id="status" role="status" aria-live="polite">번호 뽑기를 눌러 시작하세요.</p>
+
+    <section class="analysis" aria-labelledby="analysis-title">
+      <h2 id="analysis-title">최근 100회 당첨 번호 통계</h2>
+      <p class="analysis-intro">1148회~1247회 · 2024.11.30~2026.10.24<br>보너스 번호를 제외한 본번호 6개를 집계했습니다.</p>
+      <div id="analysis-summary" class="analysis-summary"></div>
+      <div id="frequency-chart" class="frequency-chart" aria-label="번호별 출현 횟수 및 비율"></div>
+      <p class="analysis-note">
+        그래프의 비율은 해당 번호가 최근 100회 중 나온 횟수(예: 20회 = 20%)입니다.
+        한 번호가 한 회차의 본번호 6개에 포함될 이론상 확률은 6/45(약 13.33%)입니다.
+        과거 빈도는 다음 추첨의 예측 확률이 아니며, 각 회차의 추첨은 독립적입니다.
+      </p>
+      <p class="analysis-source">
+        자료: <a href="https://github.com/YangSeungWon/lotto/blob/main/public/data/lottery-history.json" target="_blank" rel="noopener noreferrer">공개 회차 데이터</a>
+        · <a href="https://www.dhlottery.co.kr/gameResult.do?method=byWin" target="_blank" rel="noopener noreferrer">동행복권 당첨결과</a>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    // 공을 표시할 영역과 버튼, 생성 횟수, 안내 문구를 HTML에서 가져옵니다.
+    const ballsArea = document.querySelector("#balls");
+    const bonusBall = document.querySelector("#bonus-ball");
+    const drawButton = document.querySelector("#draw-button");
+    const resetButton = document.querySelector("#reset-button");
+    const countDisplay = document.querySelector("#count");
+    const statusMessage = document.querySelector("#status");
+    const frequencyChart = document.querySelector("#frequency-chart");
+    const analysisSummary = document.querySelector("#analysis-summary");
+
+    // 공 색상은 로또 번호 구간에 따라 달라집니다.
+    const ballColors = ["#fbbf24", "#60a5fa", "#f87171", "#94a3b8", "#34d399"];
+    // 최근 100회(1148~1247회)에서 본번호로 등장한 횟수입니다.
+    // 배열의 첫 번째 값은 1번, 마지막 값은 45번의 출현 횟수입니다.
+    const recentFrequencies = [13, 11, 16, 12, 10, 13, 14, 15, 16, 10, 10, 12, 19, 8, 17, 18, 10, 15, 13, 13, 11, 13, 14, 16, 14, 11, 20, 17, 13, 12, 16, 14, 10, 10, 13, 13, 14, 19, 15, 11, 11, 15, 9, 12, 12];
+    let drawCount = 0; // 성공적으로 번호 6개를 뽑은 횟수입니다.
+    let isDrawing = false; // 추첨 중 중복 클릭을 막는 상태입니다.
+
+    // 번호별 빈도를 높은 순으로 막대그래프에 그리고, 100회 기준 비율을 표시합니다.
+    function showFrequencyChart() {
+      const rankedNumbers = recentFrequencies
+        .map((count, index) => ({ number: index + 1, count }))
+        .sort((a, b) => b.count - a.count || a.number - b.number);
+      const highestCount = rankedNumbers[0].count;
+
+      analysisSummary.textContent =
+        `가장 많이 나온 번호: ${rankedNumbers[0].number}번 · ${rankedNumbers[0].count}회 (20%)`;
+
+      for (const { number, count } of rankedNumbers) {
+        const row = document.createElement("div");
+        row.className = "frequency-row";
+
+        const numberLabel = document.createElement("span");
+        numberLabel.className = "frequency-number";
+        numberLabel.textContent = number;
+        numberLabel.style.backgroundColor = ballColors[Math.min(Math.floor((number - 1) / 10), 4)];
+
+        const track = document.createElement("div");
+        track.className = "bar-track";
+        track.setAttribute("role", "img");
+        track.setAttribute("aria-label", `${number}번 ${count}회, 100회 중 ${count}%`);
+
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        bar.style.width = `${(count / highestCount) * 100}%`;
+        track.append(bar);
+
+        const value = document.createElement("span");
+        value.className = "frequency-value";
+        value.textContent = `${count}회 · ${count}%`;
+
+        row.append(numberLabel, track, value);
+        frequencyChart.append(row);
+      }
+    }
+
+    // 번호에 맞는 색을 적용하고 공 안에 숫자를 표시합니다.
+    function showNumber(ball, number) {
+      const colorIndex = Math.min(Math.floor((number - 1) / 10), ballColors.length - 1);
+      ball.textContent = number;
+      ball.style.backgroundColor = ballColors[colorIndex];
+      ball.style.color = number <= 10 || number > 40 ? "#422006" : "#fff";
+    }
+
+    // 1부터 45까지 섞어 당첨 번호 6개와 보너스 번호 1개를 뽑습니다.
+    // 보너스는 당첨 번호 6개와 겹치지 않으며, 당첨 번호만 오름차순으로 정렬합니다.
+    function makeNumbers() {
+      const numbers = Array.from({ length: 45 }, (_, index) => index + 1);
+      for (let i = numbers.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [numbers[i], numbers[randomIndex]] = [numbers[randomIndex], numbers[i]];
+      }
+      return {
+        main: numbers.slice(0, 6).sort((a, b) => a - b),
+        bonus: numbers[6]
+      };
+    }
+
+    // 공 하나를 잠시 굴리는 애니메이션을 보여주고 마지막에 뽑힌 번호를 표시합니다.
+    function rollBall(ball, finalNumber, delay) {
+      return new Promise((resolve) => {
+        window.setTimeout(() => {
+          ball.classList.add("rolling");
+          const rollingTimer = window.setInterval(() => {
+            showNumber(ball, Math.floor(Math.random() * 45) + 1);
+          }, 70);
+
+          window.setTimeout(() => {
+            window.clearInterval(rollingTimer);
+            showNumber(ball, finalNumber);
+            ball.classList.remove("rolling");
+            resolve();
+          }, 850);
+        }, delay);
+      });
+    }
+
+    // 당첨 번호 6개와 보너스 번호를 뽑아 공을 차례로 굴리고 결과를 갱신합니다.
+    async function drawNumbers() {
+      if (isDrawing) return;
+      isDrawing = true;
+      drawButton.disabled = true;
+      statusMessage.textContent = "번호를 뽑고 있어요...";
+
+      const { main, bonus } = makeNumbers();
+      const balls = Array.from(ballsArea.children);
+      await Promise.all([
+        ...main.map((number, index) => rollBall(balls[index], number, index * 120)),
+        rollBall(bonusBall, bonus, 6 * 120)
+      ]);
+
+      drawCount++;
+      countDisplay.textContent = drawCount;
+      statusMessage.textContent = `당첨 번호 ${main.join(", ")} · 보너스 번호 ${bonus}`;
+      drawButton.disabled = false;
+      isDrawing = false;
+    }
+
+    // 생성 횟수를 0으로 되돌리고 번호 공을 비운 초기 화면으로 만듭니다.
+    function resetPage() {
+      if (isDrawing) return;
+      drawCount = 0;
+      countDisplay.textContent = drawCount;
+      ballsArea.replaceChildren();
+      createBalls();
+      bonusBall.textContent = "?";
+      bonusBall.style.backgroundColor = "";
+      bonusBall.style.color = "";
+      statusMessage.textContent = "번호 뽑기를 눌러 시작하세요.";
+    }
+
+    // 결과 번호를 담을 빈 공 6개를 준비합니다.
+    function createBalls() {
+      for (let i = 0; i < 6; i++) {
+        const ball = document.createElement("span");
+        ball.className = "ball";
+        ball.textContent = "?";
+        ballsArea.append(ball);
+      }
+    }
+
+    drawButton.addEventListener("click", drawNumbers);
+    resetButton.addEventListener("click", resetPage);
+    createBalls();
+    showFrequencyChart();
+  </script>
+</body>
+</html>
