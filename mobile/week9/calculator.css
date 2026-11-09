@@ -1,0 +1,222 @@
+/* 패딩과 테두리를 요소의 전체 크기에 포함해 크기 계산을 단순하게 합니다. */
+* {
+  box-sizing: border-box;
+}
+
+/* 페이지 전체 배경을 만들고 계산기 카드를 화면 가운데에 배치합니다. */
+body {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px;
+  place-items: center;
+  /* 어두운 오버레이를 이미지 위에 겹쳐 계산기 글자와 버튼이 잘 보이게 합니다. */
+  background:
+    radial-gradient(ellipse at 14% 18%, #4338ca45 0, transparent 38%),
+    radial-gradient(ellipse at 88% 78%, #0e749045 0, transparent 36%),
+    radial-gradient(ellipse at 78% 8%, #2563eb30 0, transparent 30%),
+    linear-gradient(135deg, #080d1bd9, #111b30d9 52%, #090f1de6),
+    url("https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=1920&q=85");
+  background-position: center;
+  background-size: auto, auto, auto, auto, cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #f8fafc;
+  font-family: Arial, "Malgun Gothic", sans-serif;
+}
+
+/* 화면 전체에 은은한 격자와 색상 빛을 더해 배경을 꾸밉니다. */
+body::before,
+body::after {
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+}
+
+body::before {
+  inset: 0;
+  background:
+    linear-gradient(#ffffff08 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff08 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, #000 15%, transparent 78%);
+}
+
+body::after {
+  top: 13%;
+  right: 7%;
+  width: min(42vw, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #818cf633 0, #22d3ee14 42%, transparent 72%);
+  filter: blur(18px);
+}
+
+/* 계산기 카드의 너비, 여백, 모서리와 그림자를 설정합니다. */
+.calculator {
+  width: min(100%, 380px);
+  padding: 28px;
+  border: 1px solid #c7d2fe26;
+  border-radius: 28px;
+  background: linear-gradient(150deg, #1a2438f2, #101827f5 72%);
+  box-shadow: 0 24px 70px #00000066, 0 0 50px #6366f11a;
+  backdrop-filter: blur(14px);
+}
+
+/* 제목과 설명의 간격 및 글꼴을 지정합니다. */
+.calculator-header {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 5px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.65rem;
+}
+
+/* 계산 결과를 아래쪽 오른쪽에 정렬하고, 긴 숫자가 넘치지 않게 합니다. */
+.display {
+  display: flex;
+  min-height: 120px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 16px 4px 22px;
+  text-align: right;
+}
+
+/* 이전 계산 정보와 현재 숫자의 글자 모양을 각각 설정합니다. */
+.previous-value {
+  min-height: 24px;
+  margin: 0 0 6px;
+  color: #94a3b8;
+  font-size: 1rem;
+}
+
+.current-value {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  color: #f8fafc;
+  font-size: clamp(2.5rem, 12vw, 3.5rem);
+  font-variant-numeric: tabular-nums;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 버튼을 네 열 격자로 배치하고 버튼 사이 간격을 둡니다. */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* 모든 버튼에 공통으로 적용하는 크기와 기본 색상, 상호작용 효과입니다. */
+.key {
+  min-width: 0;
+  min-height: 64px;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  background: #1f2937;
+  color: #f8fafc;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1.35rem;
+  font-weight: 700;
+  transition: background-color 140ms ease, transform 140ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 마우스를 올리거나 누를 때, 키보드로 선택할 때의 표시입니다. */
+.key:hover {
+  background: #334155;
+}
+
+.key:active {
+  transform: scale(0.96);
+}
+
+.key:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 3px;
+}
+
+/* 초기화 버튼은 일반 버튼과 구분되는 색상으로 표시합니다. */
+.key-utility {
+  background: #293548;
+  color: #cbd5e1;
+  font-size: 1rem;
+}
+
+/* 사칙연산 버튼에 별도의 배경색과 글자색을 적용합니다. */
+.key-operator {
+  background: #263552;
+  color: #a5b4fc;
+}
+
+/* 계산 버튼은 두 줄 높이로 표시해 쉽게 찾을 수 있게 합니다. */
+.key-equals {
+  grid-row: span 2;
+  background: #6366f1;
+  color: #fff;
+  font-size: 1.7rem;
+}
+
+.key-equals:hover {
+  background: #4f46e5;
+}
+
+/* 0 버튼은 숫자 키패드에서 두 칸 너비로 배치합니다. */
+.key-zero {
+  grid-column: span 2;
+}
+
+/* 키보드 사용법 안내 문구를 버튼 아래에 배치합니다. */
+.keyboard-hint {
+  margin: 20px 0 0;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 작은 화면에서는 여백과 버튼 높이를 줄여 화면에 맞춥니다. */
+@media (max-width: 420px) {
+  body {
+    padding: 14px;
+  }
+
+  .calculator {
+    padding: 22px;
+    border-radius: 24px;
+  }
+
+  .keypad {
+    gap: 10px;
+  }
+
+  .key {
+    min-height: 58px;
+    border-radius: 16px;
+  }
+}
+
+/* 동작 효과를 줄이도록 설정한 사용자를 위해 전환 효과를 최소화합니다. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
