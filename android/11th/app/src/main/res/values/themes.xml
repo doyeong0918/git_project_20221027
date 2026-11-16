@@ -1,0 +1,12 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme._11th" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- 그림(흰 배경)과 앱 바탕이 같은 흰색이 되도록 -->
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="Theme._11th" parent="Base.Theme._11th" />
+</resources>
