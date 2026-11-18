@@ -1,0 +1,1015 @@
+/* 테두리와 여백을 포함해 요소의 너비와 높이를 계산합니다. */
+* { box-sizing: border-box; }
+
+/* HTML에서 숨김을 요청한 영역은 다른 표시 규칙보다 우선해 감춥니다. */
+[hidden] { display: none !important; }
+
+/* 기본 색상, 글꼴과 배경을 지정하고 페이지 전체의 최소 높이를 확보합니다. */
+body {
+  margin: 0; /* 브라우저 기본 바깥 여백을 제거합니다. */
+  min-width: 320px; /* 아주 작은 화면에서도 콘텐츠가 지나치게 눌리지 않게 합니다. */
+  min-height: 100vh; /* 내용이 짧아도 배경이 화면 높이만큼 이어지게 합니다. */
+  background: #f5f7fb; /* 밝고 편안한 회색빛 배경을 사용합니다. */
+  color: #17233c; /* 본문 글자가 배경과 충분히 구분되게 합니다. */
+  font-family: "Pretendard", "Noto Sans KR", "Malgun Gothic", sans-serif; /* 한국어를 읽기 쉬운 글꼴로 표시합니다. */
+  -webkit-font-smoothing: antialiased; /* macOS 계열 브라우저에서 글자 가장자리를 부드럽게 합니다. */
+}
+
+/* 버튼과 입력창이 본문과 같은 글꼴을 사용하게 합니다. */
+button,
+input {
+  font: inherit; /* 부모 요소의 글꼴과 크기를 이어받습니다. */
+}
+
+/* 버튼을 눌렀을 때 손 모양 커서를 표시합니다. */
+button {
+  cursor: pointer; /* 버튼임을 마우스 사용자에게 알립니다. */
+}
+
+/* 모든 콘텐츠를 가운데에 두고 화면 너비가 커져도 지나치게 넓어지지 않게 합니다. */
+.page-shell {
+  width: min(100% - 64px, 1440px); /* 좌우 여백을 두고 최대 너비를 제한합니다. */
+  margin: 0 auto; /* 페이지를 가로 가운데에 배치합니다. */
+}
+
+/* 서비스 이름과 시연 안내를 양끝에 배치하는 상단 바입니다. */
+.site-header {
+  display: flex; /* 로고와 안내 문구를 한 줄에 놓습니다. */
+  min-height: 92px; /* 상단 바가 충분한 높이를 가지게 합니다. */
+  align-items: center; /* 상단 바 안의 항목을 세로 가운데에 놓습니다. */
+  justify-content: space-between; /* 왼쪽 로고와 오른쪽 안내를 양끝으로 보냅니다. */
+  border-bottom: 1px solid #e8ebf2; /* 상단 바와 본문을 선으로 구분합니다. */
+}
+
+/* 로고 링크를 가로로 배치하고 밑줄을 없앱니다. */
+.brand {
+  display: inline-flex; /* 아이콘과 글자를 한 줄에 놓습니다. */
+  align-items: center; /* 아이콘과 글자를 세로 가운데에 맞춥니다. */
+  gap: 12px; /* 아이콘과 이름 사이 간격을 둡니다. */
+  color: inherit; /* 로고 글자에 본문 색상을 사용합니다. */
+  text-decoration: none; /* 링크 밑줄을 숨깁니다. */
+}
+
+/* 로고 아이콘의 둥근 배경과 색상을 지정합니다. */
+.brand-icon {
+  display: grid; /* 아이콘을 가운데에 놓습니다. */
+  width: 42px; /* 아이콘 상자의 너비를 지정합니다. */
+  height: 42px; /* 아이콘 상자의 높이를 지정합니다. */
+  place-items: center; /* 아이콘을 상자 한가운데에 둡니다. */
+  border-radius: 14px; /* 상자 모서리를 둥글게 만듭니다. */
+  background: #fff1d2; /* 따뜻한 노란색 배경을 사용합니다. */
+  color: #ed9e23; /* 햇살 아이콘을 배경과 구분합니다. */
+  font-size: 23px; /* 아이콘 크기를 조정합니다. */
+}
+
+/* 서비스 이름과 설명을 세로로 쌓습니다. */
+.brand strong,
+.brand small {
+  display: block; /* 이름과 설명을 각각 한 줄에 표시합니다. */
+}
+
+/* 서비스 이름의 크기와 굵기를 지정합니다. */
+.brand strong {
+  font-size: 1rem; /* 이름을 기본 글자보다 약간 크게 표시합니다. */
+  font-weight: 750; /* 이름을 강조합니다. */
+  letter-spacing: -0.035em; /* 한글 제목의 글자 간격을 조금 좁힙니다. */
+}
+
+/* 서비스 설명을 작고 차분하게 표시합니다. */
+.brand small {
+  margin-top: 3px; /* 이름과 설명 사이에 작은 간격을 둡니다. */
+  color: #8993a6; /* 설명을 제목보다 연한 색으로 표시합니다. */
+  font-size: 0.72rem; /* 짧은 보조 설명 크기를 설정합니다. */
+}
+
+/* 날씨 API 제공처 안내를 둥근 배지 모양으로 표시합니다. */
+.demo-badge {
+  display: inline-flex; /* 점과 안내 문구를 한 줄에 놓습니다. */
+  align-items: center; /* 점과 문구를 세로 가운데에 맞춥니다. */
+  gap: 8px; /* 점과 문구 사이 간격을 둡니다. */
+  margin: 0; /* 기본 문단 여백을 제거합니다. */
+  padding: 9px 13px; /* 배지 안쪽 여백을 줍니다. */
+  border: 1px solid #f1dfb8; /* 연한 노란색 테두리를 그립니다. */
+  border-radius: 999px; /* 양 끝이 둥근 알약 모양을 만듭니다. */
+  background: #fffaf0; /* 배경으로 안내를 자연스럽게 강조합니다. */
+  color: #8d672a; /* 배지 글자색을 배경과 구분합니다. */
+  font-size: 0.75rem; /* 상단 안내를 작게 표시합니다. */
+  font-weight: 650; /* 시연 안내의 가독성을 높입니다. */
+}
+
+/* 시연 안내의 작은 점에 따뜻한 색을 적용합니다. */
+.demo-badge span {
+  color: #e7a52d; /* 데이터 제공처 배지의 작은 점 색상입니다. */
+  font-size: 0.65rem; /* 점의 크기를 조절합니다. */
+}
+
+/* 사이드바와 날씨 표시 영역을 나란히 배치합니다. */
+.app-layout {
+  display: grid; /* 두 개의 주요 영역을 격자로 구성합니다. */
+  grid-template-columns: minmax(280px, 350px) minmax(0, 1fr); /* 장소 도구와 날씨 영역의 너비를 정합니다. */
+  gap: clamp(36px, 6vw, 96px); /* 두 영역 사이에 화면에 맞는 여백을 둡니다. */
+  min-height: calc(100vh - 150px); /* 화면 높이에 맞춰 본문이 충분한 공간을 차지하게 합니다. */
+  padding: 54px 0 64px; /* 본문 위아래에 여백을 둡니다. */
+}
+
+/* 사이드바의 콘텐츠를 위에서 아래로 쌓습니다. */
+.sidebar {
+  min-width: 0; /* 긴 장소 이름이 격자 너비를 밀어내지 않게 합니다. */
+}
+
+/* 검색 제목 아래에 여백을 둡니다. */
+.section-heading {
+  margin-bottom: 24px; /* 제목과 검색창 사이의 간격입니다. */
+}
+
+/* 작고 대문자인 보조 제목을 통일합니다. */
+.eyebrow {
+  margin: 0 0 10px; /* 보조 제목 아래에 간격을 둡니다. */
+  color: #8290a8; /* 보조 제목을 본문보다 연하게 표시합니다. */
+  font-size: 0.68rem; /* 분류용 글자를 작게 표시합니다. */
+  font-weight: 750; /* 작은 글자도 읽기 쉽게 굵게 만듭니다. */
+  letter-spacing: 0.13em; /* 영문 분류 글자 사이 간격을 넓힙니다. */
+}
+
+/* 장소 검색 제목을 크게 표시합니다. */
+.section-heading h1 {
+  margin: 0; /* 제목 기본 여백을 초기화합니다. */
+  font-size: clamp(1.7rem, 3vw, 2.2rem); /* 화면 크기에 따라 제목 크기를 조정합니다. */
+  font-weight: 760; /* 제목을 눈에 띄게 굵게 표시합니다. */
+  letter-spacing: -0.065em; /* 큰 제목의 글자 간격을 다듬습니다. */
+  line-height: 1.28; /* 두 줄 제목이 읽기 편하도록 줄 간격을 둡니다. */
+}
+
+/* 검색 방법 안내 문구의 색상과 간격을 지정합니다. */
+.muted-copy {
+  margin: 11px 0 0; /* 제목 아래에 설명을 배치합니다. */
+  color: #8791a3; /* 설명을 본문보다 부드럽게 표시합니다. */
+  font-size: 0.84rem; /* 안내 문구 크기를 설정합니다. */
+  line-height: 1.6; /* 안내 문장을 읽기 쉽게 줄 간격을 둡니다. */
+}
+
+/* 검색 입력창과 버튼을 한 줄로 배치합니다. */
+.search-form {
+  display: flex; /* 검색창과 버튼을 가로로 놓습니다. */
+  gap: 8px; /* 입력창과 버튼 사이 간격을 둡니다. */
+  padding: 6px; /* 검색 상자의 안쪽 여백을 둡니다. */
+  border: 1px solid #e7eaf0; /* 검색 상자의 테두리를 그립니다. */
+  border-radius: 15px; /* 검색 상자의 모서리를 둥글게 만듭니다. */
+  background: #fff; /* 검색 상자 배경을 흰색으로 설정합니다. */
+  box-shadow: 0 5px 16px #2b3c5a08; /* 상자 아래에 아주 옅은 그림자를 둡니다. */
+}
+
+/* 검색어를 입력하는 칸의 기본 모양입니다. */
+.search-form input {
+  width: 100%; /* 남은 공간을 입력창이 채웁니다. */
+  min-width: 0; /* 좁은 화면에서 입력창이 버튼을 밀어내지 않게 합니다. */
+  padding: 10px 11px; /* 입력하기 편한 안쪽 여백을 둡니다. */
+  border: 0; /* 입력창 자체 테두리를 숨깁니다. */
+  outline: 0; /* 기본 윤곽선 대신 아래 focus 스타일을 사용합니다. */
+  background: transparent; /* 검색 상자의 흰색 배경을 그대로 보입니다. */
+  color: #24314a; /* 입력한 글자를 진한 색으로 표시합니다. */
+  font-size: 0.86rem; /* 검색어 글자 크기를 설정합니다. */
+}
+
+/* 검색창 안의 안내 문구 색상을 낮춥니다. */
+.search-form input::placeholder {
+  color: #a7afbd; /* 입력 전 예시 문구를 연하게 표시합니다. */
+}
+
+/* 키보드 사용자가 검색 입력창을 찾도록 강조 표시합니다. */
+.search-form:focus-within {
+  border-color: #9aabda; /* 입력 중에는 테두리를 보라빛으로 바꿉니다. */
+  box-shadow: 0 0 0 3px #7188d21a; /* 입력 중임을 부드러운 외곽선으로 보여줍니다. */
+}
+
+/* 검색 버튼에 대비되는 색상과 둥근 모서리를 적용합니다. */
+.search-button {
+  flex: 0 0 auto; /* 버튼이 입력창에 눌려 작아지지 않게 합니다. */
+  padding: 0 17px; /* 버튼 글자 좌우에 여백을 둡니다. */
+  border: 0; /* 기본 버튼 테두리를 없앱니다. */
+  border-radius: 11px; /* 버튼 모서리를 둥글게 만듭니다. */
+  background: #526bc2; /* 검색 버튼을 파란 보라색으로 표시합니다. */
+  color: #fff; /* 버튼 글자를 흰색으로 표시합니다. */
+  font-size: 0.82rem; /* 버튼 글자 크기를 설정합니다. */
+  font-weight: 700; /* 버튼 글자를 강조합니다. */
+  transition: background-color 150ms ease, transform 150ms ease; /* 버튼 반응을 부드럽게 전환합니다. */
+}
+
+/* 마우스를 검색 버튼 위에 올렸을 때 색을 진하게 바꿉니다. */
+.search-button:hover {
+  background: #4159ad; /* 검색 버튼의 강조 색상입니다. */
+}
+
+/* API 검색 중에는 중복 제출을 막고 진행 상태를 표시합니다. */
+.search-button:disabled {
+  cursor: wait; /* 검색이 끝날 때까지 기다리는 중임을 알립니다. */
+  opacity: 0.65; /* 비활성화된 버튼을 주변과 구분합니다. */
+}
+
+/* 버튼을 누르는 순간 살짝 줄어드는 피드백을 줍니다. */
+.search-button:active {
+  transform: scale(0.97); /* 누름 동작을 짧은 크기 변화로 표현합니다. */
+}
+
+/* 키보드 포커스가 있는 버튼을 명확한 테두리로 표시합니다. */
+button:focus-visible {
+  outline: 3px solid #8da1e4; /* 키보드 사용자에게 현재 위치를 보여줍니다. */
+  outline-offset: 3px; /* 포커스 테두리와 버튼 사이에 간격을 둡니다. */
+}
+
+/* 검색 결과가 표시될 때 지도와 겹치지 않게 간격을 둡니다. */
+.results-section {
+  margin-top: 20px; /* 검색창과 결과 목록 사이 간격입니다. */
+}
+
+/* 검색 결과와 목록 제목에 공통으로 사용하는 보조 제목입니다. */
+.subheading {
+  margin: 0; /* 제목 기본 바깥 여백을 제거합니다. */
+  color: #25324a; /* 제목에 진한 본문 색상을 사용합니다. */
+  font-size: 0.94rem; /* 작은 영역 제목의 글자 크기입니다. */
+  font-weight: 720; /* 제목을 본문보다 굵게 표시합니다. */
+  letter-spacing: -0.035em; /* 한글 제목 글자 간격을 다듬습니다. */
+}
+
+/* 검색 결과 장소 버튼을 세로 목록으로 배치합니다. */
+.search-results {
+  display: grid; /* 검색 결과 버튼을 위에서 아래로 배치합니다. */
+  gap: 7px; /* 각 결과 버튼 사이 간격을 둡니다. */
+  margin-top: 10px; /* 제목과 결과 목록 사이 여백입니다. */
+}
+
+/* 장소 검색 결과를 누르기 쉬운 행으로 표시합니다. */
+.result-button {
+  display: flex; /* 장소 이름과 보조 정보를 한 줄로 배치합니다. */
+  width: 100%; /* 결과 버튼을 목록 너비만큼 확장합니다. */
+  align-items: center; /* 장소 이름과 정보의 세로 위치를 맞춥니다. */
+  justify-content: space-between; /* 장소 이름과 화살표를 양끝으로 보냅니다. */
+  padding: 11px 13px; /* 버튼 안에 누르기 편한 여백을 둡니다. */
+  border: 1px solid #edf0f5; /* 각 검색 결과를 얇은 테두리로 구분합니다. */
+  border-radius: 12px; /* 검색 결과 행을 둥글게 만듭니다. */
+  background: #fff; /* 결과 행 배경을 흰색으로 설정합니다. */
+  color: #293650; /* 결과 이름을 진한 색으로 표시합니다. */
+  text-align: left; /* 장소 이름을 왼쪽에 정렬합니다. */
+}
+
+/* 결과에 마우스를 올리면 선택할 수 있음을 보여줍니다. */
+.result-button:hover {
+  border-color: #c9d2ee; /* 테두리를 파란빛으로 강조합니다. */
+  background: #f9faff; /* 배경을 아주 옅은 파란색으로 바꿉니다. */
+}
+
+/* 검색 결과 이름과 지역 정보를 세로로 쌓습니다. */
+.result-name,
+.result-region {
+  display: block; /* 이름과 지역을 각각 별도 줄에 표시합니다. */
+}
+
+/* 결과 장소 이름을 적당히 강조합니다. */
+.result-name {
+  font-size: 0.82rem; /* 검색 결과 이름 크기입니다. */
+  font-weight: 700; /* 장소 이름을 눈에 띄게 표시합니다. */
+}
+
+/* 결과 장소의 지역 정보를 작고 연하게 표시합니다. */
+.result-region {
+  margin-top: 3px; /* 장소 이름과 지역 사이의 간격입니다. */
+  color: #8993a5; /* 지역 설명을 보조 색상으로 표시합니다. */
+  font-size: 0.72rem; /* 지역 설명의 글자 크기입니다. */
+}
+
+/* 검색 결과가 없을 때 설명을 보여주는 문단입니다. */
+.no-results {
+  margin: 0; /* 기본 문단 여백을 제거합니다. */
+  padding: 12px; /* 안내 문구 주위에 여백을 둡니다. */
+  border-radius: 12px; /* 안내 상자의 모서리를 둥글게 합니다. */
+  background: #fff; /* 결과 안내 배경을 흰색으로 표시합니다. */
+  color: #78849a; /* 안내 문구를 차분하게 표시합니다. */
+  font-size: 0.8rem; /* 짧은 안내 글자 크기입니다. */
+  line-height: 1.55; /* 두 줄이 될 때 읽기 좋게 간격을 둡니다. */
+}
+
+/* 지도 제목과 작은 종류 배지를 양쪽에 놓습니다. */
+.section-row {
+  display: flex; /* 제목과 보조 정보를 한 줄에 둡니다. */
+  align-items: center; /* 세로 가운데에 정렬합니다. */
+  justify-content: space-between; /* 양쪽 끝에 항목을 배치합니다. */
+  gap: 12px; /* 좁은 너비에서 항목이 붙지 않도록 합니다. */
+}
+
+/* 지도와 관심 장소 섹션을 분리하는 간격입니다. */
+.map-section {
+  margin-top: 30px; /* 검색 영역과 지도 사이에 간격을 둡니다. */
+}
+
+/* 빠른 지역 선택과 하루 예보의 보조 안내를 작은 글자로 표시합니다. */
+.map-label,
+.forecast-label {
+  color: #929caf; /* 부가 라벨을 연한 색으로 표시합니다. */
+  font-size: 0.7rem; /* 라벨 글자 크기를 작게 설정합니다. */
+}
+
+/* 실제 지도가 아닌 선택용 그림 지도의 바탕을 만듭니다. */
+.demo-map {
+  position: relative; /* 길, 공원, 장소 점의 기준 상자를 만듭니다. */
+  height: 196px; /* 지도의 높이를 고정해 장소를 보기 쉽게 합니다. */
+  overflow: hidden; /* 지도 바깥으로 나가는 장식 요소를 숨깁니다. */
+  margin-top: 13px; /* 지도 제목 아래에 간격을 둡니다. */
+  border: 1px solid #e3e9e6; /* 그림 지도의 경계를 표시합니다. */
+  border-radius: 16px; /* 지도 네 모서리를 둥글게 만듭니다. */
+  background-color: #edf2eb; /* 지도 바탕을 연한 녹색으로 설정합니다. */
+  background-image: linear-gradient(30deg, #dce8df 1px, transparent 1px), linear-gradient(120deg, #dce8df 1px, transparent 1px); /* 간단한 거리 격자를 만듭니다. */
+  background-size: 54px 54px; /* 지도 격자 간격을 정합니다. */
+}
+
+/* 지도 위를 대각선으로 흐르는 강을 장식합니다. */
+.map-river {
+  position: absolute; /* 지도 내부의 위치를 직접 지정합니다. */
+  top: -34%; /* 강이 지도의 위쪽 바깥에서 들어오게 합니다. */
+  left: 47%; /* 강을 지도 가운데 부근에 배치합니다. */
+  width: 32px; /* 강의 너비를 정합니다. */
+  height: 175%; /* 강이 지도 전체를 대각선으로 가로지르게 합니다. */
+  border-radius: 50%; /* 강의 가장자리를 부드럽게 만듭니다. */
+  background: #c8e1e9; /* 강을 연한 파란색으로 표시합니다. */
+  transform: rotate(38deg); /* 강의 방향을 대각선으로 기울입니다. */
+}
+
+/* 지도 속 녹지를 둥근 모양으로 표시합니다. */
+.map-park {
+  position: absolute; /* 공원을 지도 위에 올려놓습니다. */
+  border-radius: 50%; /* 공원 모양을 둥글게 만듭니다. */
+  background: #d3e6cf; /* 공원을 주변보다 조금 진한 녹색으로 표시합니다. */
+}
+
+/* 첫 번째 녹지의 크기와 위치를 지정합니다. */
+.map-park-one {
+  top: 16%; /* 첫 번째 녹지를 지도 위쪽에 둡니다. */
+  left: 10%; /* 첫 번째 녹지를 지도 왼쪽에 둡니다. */
+  width: 68px; /* 첫 번째 녹지의 너비입니다. */
+  height: 43px; /* 첫 번째 녹지의 높이입니다. */
+}
+
+/* 두 번째 녹지의 크기와 위치를 지정합니다. */
+.map-park-two {
+  right: 7%; /* 두 번째 녹지를 지도 오른쪽에 둡니다. */
+  bottom: 11%; /* 두 번째 녹지를 지도 아래쪽에 둡니다. */
+  width: 60px; /* 두 번째 녹지의 너비입니다. */
+  height: 48px; /* 두 번째 녹지의 높이입니다. */
+}
+
+/* 지도의 도로를 길쭉한 둥근 선으로 표시합니다. */
+.map-road {
+  position: absolute; /* 길을 지도 위에 배치합니다. */
+  border-radius: 20px; /* 도로 끝을 둥글게 만듭니다. */
+  background: #fffefa; /* 도로를 흰빛으로 표시합니다. */
+  box-shadow: 0 0 0 1px #e9e7dc; /* 도로의 가장자리를 은은하게 구분합니다. */
+}
+
+/* 지도 위쪽으로 이어지는 첫 번째 도로입니다. */
+.map-road-one {
+  top: 48%; /* 첫 번째 도로의 세로 위치입니다. */
+  left: -10%; /* 도로가 지도 왼쪽 바깥에서 시작합니다. */
+  width: 120%; /* 도로가 지도 오른쪽까지 이어집니다. */
+  height: 9px; /* 첫 번째 도로의 굵기입니다. */
+  transform: rotate(-18deg); /* 첫 번째 도로를 대각선으로 기울입니다. */
+}
+
+/* 지도 아래쪽을 비스듬히 가로지르는 두 번째 도로입니다. */
+.map-road-two {
+  top: 69%; /* 두 번째 도로의 세로 위치입니다. */
+  left: 13%; /* 도로가 지도 안쪽에서 시작합니다. */
+  width: 110%; /* 도로가 지도의 오른쪽을 지나가게 합니다. */
+  height: 7px; /* 두 번째 도로의 굵기입니다. */
+  transform: rotate(25deg); /* 두 번째 도로를 반대 방향으로 기울입니다. */
+}
+
+/* 지도에 놓인 장소 이름과 점을 버튼으로 표시합니다. */
+.map-pin {
+  position: absolute; /* 각 장소를 지도 위 좌표에 둡니다. */
+  z-index: 1; /* 장소 버튼이 길과 강 위에 보이게 합니다. */
+  display: inline-flex; /* 장소 점과 이름을 가로로 놓습니다. */
+  align-items: center; /* 점과 이름을 세로 가운데에 맞춥니다. */
+  gap: 5px; /* 점과 장소 이름 사이에 간격을 둡니다. */
+  padding: 5px 7px; /* 장소 버튼을 쉽게 누를 수 있도록 여백을 둡니다. */
+  border: 1px solid #e7e9e1; /* 작은 장소 버튼의 경계를 만듭니다. */
+  border-radius: 9px; /* 장소 버튼 모서리를 둥글게 만듭니다. */
+  background: #ffffffed; /* 지도 위에서도 버튼 글자가 읽히게 합니다. */
+  color: #49556a; /* 장소 이름을 지도 배경과 구분합니다. */
+  font-size: 0.68rem; /* 지도 장소 이름을 작게 표시합니다. */
+  font-weight: 700; /* 짧은 장소 이름을 선명하게 표시합니다. */
+  box-shadow: 0 2px 6px #25324a12; /* 지도 위 버튼을 배경과 구분합니다. */
+  transition: border-color 140ms ease, transform 140ms ease; /* 선택 시 반응을 부드럽게 합니다. */
+}
+
+/* 지도 장소 버튼의 점을 작은 원으로 표시합니다. */
+.map-pin span {
+  width: 7px; /* 장소 점의 너비를 지정합니다. */
+  height: 7px; /* 장소 점의 높이를 지정합니다. */
+  border-radius: 50%; /* 장소 점을 원으로 만듭니다. */
+  background: #657bd0; /* 장소 점에 파란 보라색을 사용합니다. */
+}
+
+/* 마우스를 장소 버튼 위에 올리면 선택할 수 있음을 보여줍니다. */
+.map-pin:hover {
+  border-color: #8799d8; /* 테두리를 강조합니다. */
+  transform: translateY(-2px); /* 버튼을 위로 조금 움직입니다. */
+}
+
+/* 서울 장소 버튼의 지도 위치를 설정합니다. */
+.pin-seoul {
+  top: 19%; /* 서울 버튼의 위쪽 위치입니다. */
+  left: 35%; /* 서울 버튼의 왼쪽 위치입니다. */
+}
+
+/* 수원 장소 버튼의 지도 위치를 설정합니다. */
+.pin-suwon {
+  top: 52%; /* 수원 버튼의 위쪽 위치입니다. */
+  left: 14%; /* 수원 버튼의 왼쪽 위치입니다. */
+}
+
+/* 부산 장소 버튼의 지도 위치를 설정합니다. */
+.pin-busan {
+  right: 7%; /* 부산 버튼의 오른쪽 여백입니다. */
+  bottom: 18%; /* 부산 버튼의 아래쪽 위치입니다. */
+}
+
+/* 제주 장소 버튼의 지도 위치를 설정합니다. */
+.pin-jeju {
+  bottom: 10%; /* 제주 버튼의 아래쪽 위치입니다. */
+  left: 28%; /* 제주 버튼의 왼쪽 위치입니다. */
+}
+
+/* 간단 지도 사용 방법을 작고 읽기 쉽게 안내합니다. */
+.map-note {
+  margin: 9px 0 0; /* 지도 아래에 작은 여백을 둡니다. */
+  color: #949daf; /* 추가 안내를 보조 색상으로 표시합니다. */
+  font-size: 0.71rem; /* 짧은 지도 안내 글자 크기입니다. */
+}
+
+/* 관심 장소 영역과 지도 사이를 구분합니다. */
+.favorites-section {
+  margin-top: 30px; /* 지도 아래에 관심 장소 목록을 배치합니다. */
+  padding-top: 20px; /* 구분선과 제목 사이 공간을 둡니다. */
+  border-top: 1px solid #e8ebf1; /* 섹션 경계를 얇은 선으로 표시합니다. */
+}
+
+/* 저장된 장소 수를 작은 둥근 숫자 배지로 표시합니다. */
+.count-badge {
+  display: inline-grid; /* 숫자를 배지 가운데에 배치합니다. */
+  min-width: 23px; /* 한 자리 수에도 배지 모양을 유지합니다. */
+  height: 23px; /* 숫자 배지 높이를 설정합니다. */
+  padding: 0 6px; /* 두 자리 숫자에 필요한 좌우 공간입니다. */
+  place-items: center; /* 숫자를 배지 정가운데에 둡니다. */
+  border-radius: 999px; /* 배지를 알약 모양으로 만듭니다. */
+  background: #e9edf8; /* 배지에 연한 파란 회색을 사용합니다. */
+  color: #6879b7; /* 숫자를 배경과 구분합니다. */
+  font-size: 0.7rem; /* 배지 숫자를 작게 표시합니다. */
+  font-weight: 700; /* 배지 숫자를 선명하게 표시합니다. */
+}
+
+/* 관심 장소 목록의 기본 점과 여백을 없앱니다. */
+.favorites-list {
+  display: grid; /* 장소 행을 세로로 쌓습니다. */
+  gap: 7px; /* 각 저장 장소 사이에 간격을 둡니다. */
+  margin: 12px 0 0; /* 목록 위쪽 간격을 설정합니다. */
+  padding: 0; /* 목록 기본 들여쓰기를 제거합니다. */
+  list-style: none; /* 목록 앞의 기본 점을 숨깁니다. */
+}
+
+/* 저장된 장소가 없을 때 표시하는 안내입니다. */
+.favorites-empty {
+  margin: 0; /* 기본 여백을 없앱니다. */
+  color: #9aa3b2; /* 빈 목록 안내를 부드럽게 표시합니다. */
+  font-size: 0.75rem; /* 보조 안내 글자 크기를 설정합니다. */
+  line-height: 1.55; /* 두 줄 안내 문장의 간격입니다. */
+}
+
+/* 저장된 장소의 이름과 삭제 버튼을 한 줄에 배치합니다. */
+.favorite-item {
+  display: flex; /* 장소 이름과 삭제 버튼을 나란히 둡니다. */
+  align-items: center; /* 장소 이름과 삭제 버튼을 세로 가운데에 맞춥니다. */
+  justify-content: space-between; /* 이름과 삭제 버튼을 양끝에 배치합니다. */
+  gap: 8px; /* 좁은 화면에서 이름과 삭제 버튼 사이에 여백을 둡니다. */
+}
+
+/* 저장된 장소를 날씨 화면에서 다시 선택하는 버튼입니다. */
+.favorite-place-button {
+  display: flex; /* 장소 이름과 선택 표시를 가로로 배치합니다. */
+  min-width: 0; /* 긴 장소 이름이 삭제 버튼을 밀어내지 않게 합니다. */
+  flex: 1; /* 남은 행 너비를 사용합니다. */
+  align-items: center; /* 장소 이름과 점을 세로 가운데에 둡니다. */
+  gap: 9px; /* 점과 장소 이름 사이 간격을 둡니다. */
+  padding: 8px 0; /* 목록 행의 세로 여백을 줍니다. */
+  border: 0; /* 기본 버튼 테두리를 제거합니다. */
+  background: transparent; /* 사이드바 배경을 그대로 보입니다. */
+  color: #4a566b; /* 장소 이름을 또렷하게 표시합니다. */
+  text-align: left; /* 장소 이름을 왼쪽 정렬합니다. */
+  font-size: 0.79rem; /* 저장 장소 이름의 글자 크기입니다. */
+}
+
+/* 저장 장소 이름 앞에 작은 장식 점을 표시합니다. */
+.favorite-place-button::before {
+  width: 7px; /* 장식 점의 너비입니다. */
+  height: 7px; /* 장식 점의 높이입니다. */
+  flex: 0 0 auto; /* 작은 점의 크기가 줄어들지 않게 합니다. */
+  border-radius: 50%; /* 장식 점을 원으로 만듭니다. */
+  background: #c6cddd; /* 기본 상태에서 점을 연하게 표시합니다. */
+  content: ""; /* CSS 가상 요소에 점을 표시합니다. */
+}
+
+/* 현재 선택된 장소의 점을 강조합니다. */
+.favorite-place-button[aria-current="true"]::before {
+  background: #657bd0; /* 선택된 장소 점을 파란 보라색으로 바꿉니다. */
+}
+
+/* 저장 장소를 지우는 작은 버튼입니다. */
+.favorite-remove-button {
+  flex: 0 0 auto; /* 삭제 버튼의 크기를 유지합니다. */
+  padding: 5px 7px; /* 누르기 위한 작은 안쪽 여백을 둡니다. */
+  border: 0; /* 기본 버튼 테두리를 제거합니다. */
+  border-radius: 7px; /* 삭제 버튼 모서리를 둥글게 합니다. */
+  background: transparent; /* 평소에는 배경을 투명하게 둡니다. */
+  color: #9ca5b4; /* 삭제 표시를 보조 색상으로 나타냅니다. */
+  font-size: 0.7rem; /* 삭제 글자 크기를 작게 설정합니다. */
+}
+
+/* 삭제 버튼에 마우스를 올리면 위험 동작임을 알리는 색으로 바꿉니다. */
+.favorite-remove-button:hover {
+  background: #fff0ef; /* 삭제 버튼의 배경을 연한 붉은색으로 바꿉니다. */
+  color: #c86d68; /* 삭제 글자를 붉은색으로 강조합니다. */
+}
+
+/* 선택 장소의 날씨 화면을 오른쪽 영역에 둡니다. */
+.weather-area {
+  min-width: 0; /* 긴 날씨 설명이 전체 격자 폭을 늘리지 않게 합니다. */
+  padding-top: 20px; /* 머리말과 날씨 정보를 적당히 띄웁니다. */
+}
+
+/* 아직 장소를 고르지 않았을 때 보여주는 안내를 가운데 배치합니다. */
+.empty-state {
+  display: flex; /* 빈 상태 안내를 세로로 쌓습니다. */
+  min-height: 550px; /* 날씨 영역 안에서 안내가 가운데 놓이도록 높이를 확보합니다. */
+  flex-direction: column; /* 아이콘, 제목, 설명을 위에서 아래로 쌓습니다. */
+  align-items: center; /* 안내 요소를 가로 가운데에 둡니다. */
+  justify-content: center; /* 안내 요소를 세로 가운데에 둡니다. */
+  padding: 32px; /* 작은 화면에서 안내가 가장자리에 닿지 않게 합니다. */
+  text-align: center; /* 안내 문장을 가운데 정렬합니다. */
+}
+
+/* 빈 상태 안내의 큰 위치 아이콘을 둥근 상자에 표시합니다. */
+.empty-icon {
+  display: grid; /* 아이콘을 상자 가운데에 둡니다. */
+  width: 68px; /* 아이콘 상자 너비를 지정합니다. */
+  height: 68px; /* 아이콘 상자 높이를 지정합니다. */
+  margin-bottom: 23px; /* 아이콘과 설명 사이 간격을 둡니다. */
+  place-items: center; /* 아이콘을 한가운데에 배치합니다. */
+  border: 1px solid #e4e8f1; /* 아이콘 상자 경계를 표시합니다. */
+  border-radius: 22px; /* 상자 모서리를 둥글게 만듭니다. */
+  background: #fff; /* 아이콘 배경을 흰색으로 표시합니다. */
+  color: #7385cc; /* 위치 아이콘을 강조합니다. */
+  font-size: 2rem; /* 위치 아이콘 크기를 설정합니다. */
+  box-shadow: 0 12px 30px #2837520a; /* 안내 아이콘 아래에 가벼운 그림자를 둡니다. */
+}
+
+/* 빈 상태 안내 제목의 위아래 여백과 크기를 지정합니다. */
+.empty-state h2 {
+  margin: 0; /* 제목 기본 여백을 초기화합니다. */
+  font-size: clamp(1.3rem, 2.3vw, 1.75rem); /* 화면 크기에 따라 제목 크기를 조정합니다. */
+  letter-spacing: -0.05em; /* 제목 글자 사이를 조금 좁힙니다. */
+}
+
+/* 빈 상태 안내 설명을 차분한 색으로 표시합니다. */
+.empty-state > p:last-child {
+  margin: 12px 0 0; /* 제목과 설명 사이에 간격을 둡니다. */
+  color: #8993a5; /* 설명을 본문보다 연하게 표시합니다. */
+  font-size: 0.86rem; /* 안내 문구 글자 크기입니다. */
+  line-height: 1.8; /* 두 줄 문장이 편하게 읽히도록 줄 간격을 둡니다. */
+}
+
+/* 선택 장소 이름과 저장 버튼을 양쪽에 배치합니다. */
+.weather-header {
+  display: flex; /* 장소 정보와 저장 버튼을 한 줄에 둡니다. */
+  align-items: center; /* 두 영역을 세로 가운데에 맞춥니다. */
+  justify-content: space-between; /* 장소 이름과 버튼을 양끝에 배치합니다. */
+  gap: 20px; /* 화면이 좁을 때 두 영역 사이 간격을 둡니다. */
+  margin-bottom: 24px; /* 장소 머리말과 현재 날씨 카드 사이 간격입니다. */
+}
+
+/* 장소 이름을 크게 표시합니다. */
+.weather-header h2 {
+  margin: 0; /* 제목 기본 여백을 없앱니다. */
+  font-size: clamp(1.7rem, 3vw, 2.15rem); /* 화면 크기에 따라 장소 이름을 조정합니다. */
+  font-weight: 760; /* 선택한 장소 이름을 강조합니다. */
+  letter-spacing: -0.065em; /* 제목 글자 간격을 다듬습니다. */
+}
+
+/* 장소의 지역 정보를 보조 문구로 표시합니다. */
+.location-description {
+  margin: 6px 0 0; /* 장소 이름 아래에 지역 정보를 둡니다. */
+  color: #8993a5; /* 지역 정보를 부드러운 색으로 표시합니다. */
+  font-size: 0.82rem; /* 지역 정보 글자 크기입니다. */
+}
+
+/* 관심 장소 저장 버튼을 테두리 있는 흰색 버튼으로 표시합니다. */
+.favorite-toggle {
+  display: inline-flex; /* 별 아이콘과 문구를 한 줄에 둡니다. */
+  flex: 0 0 auto; /* 버튼이 너무 작아지지 않게 합니다. */
+  align-items: center; /* 아이콘과 문구를 세로 가운데에 맞춥니다. */
+  gap: 8px; /* 별과 버튼 문구 사이 간격을 둡니다. */
+  padding: 10px 13px; /* 버튼을 편하게 누르도록 여백을 둡니다. */
+  border: 1px solid #e3e7ef; /* 버튼 테두리를 그립니다. */
+  border-radius: 11px; /* 버튼 모서리를 둥글게 만듭니다. */
+  background: #fff; /* 버튼 배경을 흰색으로 설정합니다. */
+  color: #5d6b87; /* 버튼 문구를 본문과 구분합니다. */
+  font-size: 0.76rem; /* 버튼 문구 글자 크기입니다. */
+  font-weight: 650; /* 버튼 문구를 조금 강조합니다. */
+}
+
+/* 저장된 장소의 버튼을 노란색 별로 강조합니다. */
+.favorite-toggle[aria-pressed="true"] {
+  border-color: #f0dfb8; /* 저장된 상태를 따뜻한 테두리로 표시합니다. */
+  background: #fffaf0; /* 저장된 상태에 연한 노란 배경을 적용합니다. */
+  color: #9b742f; /* 저장 상태 문구를 노란 갈색으로 표시합니다. */
+}
+
+/* 날씨 데이터를 표시할 수 없거나 다시 시도할 때의 안내입니다. */
+.weather-message {
+  margin: 0 0 16px; /* 현재 날씨 카드 위쪽에 간격을 둡니다. */
+  padding: 12px 15px; /* 안내 안쪽 여백을 둡니다. */
+  border: 1px solid #f0dfbd; /* 안내 경계를 노란색 계열로 표시합니다. */
+  border-radius: 12px; /* 안내 상자 모서리를 둥글게 만듭니다. */
+  background: #fffaf0; /* 안내 배경을 연한 노란색으로 표시합니다. */
+  color: #80652f; /* 안내 문구를 읽기 쉽게 표시합니다. */
+  font-size: 0.8rem; /* 안내 문구 글자 크기입니다. */
+  line-height: 1.55; /* 안내가 여러 줄일 때 읽기 편하게 합니다. */
+}
+
+/* 다시 시도 버튼을 안내 문구 안에 배치합니다. */
+.retry-button {
+  margin-left: 9px; /* 안내 문구와 버튼 사이 간격입니다. */
+  padding: 4px 8px; /* 작은 버튼의 누르기 여백입니다. */
+  border: 1px solid #ddc58e; /* 다시 시도 버튼을 테두리로 구분합니다. */
+  border-radius: 7px; /* 작은 버튼의 모서리를 둥글게 만듭니다. */
+  background: #fff; /* 버튼 바탕을 흰색으로 표시합니다. */
+  color: #785d27; /* 버튼 문구를 안내와 구분합니다. */
+  font-size: 0.74rem; /* 버튼 글자를 작게 표시합니다. */
+  font-weight: 700; /* 다시 시도 동작을 강조합니다. */
+}
+
+/* 현재 날씨를 큰 온도와 강수 안내로 나누는 카드입니다. */
+.current-weather-card {
+  display: flex; /* 기온과 강수 요약을 나란히 놓습니다. */
+  min-height: 218px; /* 첫 화면에서 현재 날씨를 충분히 강조합니다. */
+  align-items: center; /* 카드 내용의 세로 위치를 맞춥니다. */
+  justify-content: space-between; /* 왼쪽과 오른쪽 정보를 양끝에 배치합니다. */
+  gap: 24px; /* 카드의 두 부분 사이 간격입니다. */
+  padding: clamp(24px, 4vw, 44px); /* 화면 크기에 맞는 안쪽 여백을 둡니다. */
+  border: 1px solid #edf0f5; /* 카드 테두리를 부드럽게 표시합니다. */
+  border-radius: 22px; /* 카드 모서리를 둥글게 만듭니다. */
+  background: linear-gradient(115deg, #fff 45%, #f5f7ff 100%); /* 오른쪽으로 옅은 푸른빛을 더합니다. */
+  box-shadow: 0 12px 34px #2b3c5a08; /* 카드 아래에 가벼운 그림자를 둡니다. */
+}
+
+/* 날씨 아이콘과 기온 정보를 한 묶음으로 배치합니다. */
+.current-main {
+  display: flex; /* 아이콘과 온도 정보를 한 줄에 놓습니다. */
+  align-items: center; /* 큰 아이콘과 정보를 세로 가운데에 맞춥니다. */
+  gap: clamp(18px, 3vw, 34px); /* 큰 아이콘과 기온 사이 간격입니다. */
+}
+
+/* 현재 날씨의 그림 문자 크기를 설정합니다. */
+.weather-icon {
+  font-size: clamp(3.2rem, 7vw, 5.3rem); /* 화면 크기에 따라 아이콘 크기를 조정합니다. */
+  line-height: 1; /* 아이콘 상자에 불필요한 줄 간격을 없앱니다. */
+  filter: drop-shadow(0 8px 10px #e9b65730); /* 그림자 효과로 아이콘을 살짝 띄웁니다. */
+}
+
+/* 큰 현재 기온을 강조합니다. */
+.temperature {
+  margin: 0; /* 기온 기본 여백을 제거합니다. */
+  color: #23314b; /* 기온을 진한 색으로 표시합니다. */
+  font-size: clamp(3.2rem, 7vw, 5rem); /* 현재 기온을 가장 크게 표시합니다. */
+  font-weight: 650; /* 숫자를 선명하게 표시합니다. */
+  letter-spacing: -0.09em; /* 숫자와 도 기호 간격을 다듬습니다. */
+  line-height: 1; /* 숫자를 세로로 조밀하게 표시합니다. */
+  font-variant-numeric: tabular-nums; /* 숫자의 폭을 일정하게 맞춥니다. */
+}
+
+/* 현재 날씨 상태를 온도 아래에 표시합니다. */
+.condition {
+  margin: 8px 0 0; /* 기온과 상태 문구 사이 간격입니다. */
+  color: #596782; /* 날씨 상태를 보조 색상으로 표시합니다. */
+  font-size: 0.95rem; /* 상태 문구 크기를 설정합니다. */
+  font-weight: 650; /* 날씨 상태를 눈에 띄게 표시합니다. */
+}
+
+/* API가 반환한 현지 기준 시각을 작은 글자로 표시합니다. */
+.weather-updated {
+  margin: 6px 0 0; /* 상태 설명 아래에 간격을 둡니다. */
+  color: #9aa3b1; /* 시각 안내를 연하게 표시합니다. */
+  font-size: 0.7rem; /* 보조 시각 글자를 작게 표시합니다. */
+}
+
+/* 강수 정보를 별도 색상 카드로 구분합니다. */
+.rain-summary {
+  display: flex; /* 우산 아이콘과 강수 정보를 나란히 둡니다. */
+  width: min(100%, 220px); /* 강수 카드의 최대 너비를 제한합니다. */
+  align-items: center; /* 아이콘과 문구를 세로 가운데에 둡니다. */
+  gap: 12px; /* 우산 아이콘과 설명 사이 여백입니다. */
+  padding: 16px; /* 강수 카드 안쪽 여백입니다. */
+  border: 1px solid #e5edf5; /* 카드 테두리를 연한 파란색으로 표시합니다. */
+  border-radius: 15px; /* 강수 카드 모서리를 둥글게 만듭니다. */
+  background: #ffffffc9; /* 카드 배경을 반투명 흰색으로 표시합니다. */
+}
+
+/* 강수 카드의 우산 모양 아이콘을 표시합니다. */
+.rain-icon {
+  display: grid; /* 아이콘을 정사각형 가운데에 둡니다. */
+  width: 38px; /* 아이콘 상자의 너비입니다. */
+  height: 38px; /* 아이콘 상자의 높이입니다. */
+  flex: 0 0 auto; /* 아이콘 상자의 크기를 유지합니다. */
+  place-items: center; /* 우산 아이콘을 가운데에 정렬합니다. */
+  border-radius: 12px; /* 아이콘 상자의 모서리를 둥글게 합니다. */
+  background: #edf4fc; /* 우산 아이콘 뒤에 연한 파란 배경을 둡니다. */
+  color: #5883b5; /* 우산 아이콘 색상을 지정합니다. */
+  font-size: 1.25rem; /* 우산 아이콘 크기입니다. */
+}
+
+/* 강수 정보의 제목을 표시합니다. */
+.rain-summary strong {
+  color: #4d5a70; /* 강수 제목을 본문과 구분합니다. */
+  font-size: 0.76rem; /* 강수 제목 글자 크기입니다. */
+}
+
+/* 강수 확률과 강수량을 표시하는 문장입니다. */
+.rain-summary p {
+  margin: 4px 0 0; /* 제목 아래에 간격을 둡니다. */
+  color: #8a94a5; /* 설명을 부드럽게 표시합니다. */
+  font-size: 0.72rem; /* 상세 강수 글자 크기입니다. */
+  line-height: 1.5; /* 두 줄 강수 안내 간격입니다. */
+}
+
+/* 상세 날씨 영역을 현재 날씨 카드 아래에 배치합니다. */
+.detail-section {
+  margin-top: 31px; /* 현재 날씨와 상세 날씨 사이 간격입니다. */
+}
+
+/* 날짜를 상세 영역 제목 옆에 표시합니다. */
+.today-date {
+  color: #9aa3b1; /* 날짜를 보조 색상으로 표시합니다. */
+  font-size: 0.72rem; /* 날짜 글자 크기를 작게 설정합니다. */
+}
+
+/* 상세 날씨 네 가지 항목을 같은 너비 카드로 배치합니다. */
+.detail-grid {
+  display: grid; /* 상세 정보 카드를 격자로 배치합니다. */
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 기본 화면에서 네 장의 카드를 나란히 둡니다. */
+  gap: 12px; /* 상세 카드 사이 간격입니다. */
+  margin-top: 14px; /* 제목 아래에 카드 여백을 둡니다. */
+}
+
+/* 체감온도, 습도, 바람, 대기질 카드의 공통 모양입니다. */
+.detail-card {
+  min-width: 0; /* 긴 대기질 문구가 다른 카드를 밀지 않게 합니다. */
+  min-height: 151px; /* 모든 상세 카드의 높이를 비슷하게 맞춥니다. */
+  padding: 16px 17px; /* 상세 카드 내부 여백을 둡니다. */
+  border: 1px solid #edf0f5; /* 카드 테두리를 표시합니다. */
+  border-radius: 16px; /* 카드 모서리를 둥글게 만듭니다. */
+  background: #fff; /* 카드 바탕을 흰색으로 표시합니다. */
+  box-shadow: 0 6px 20px #2b3c5a05; /* 카드 아래에 가벼운 그림자를 둡니다. */
+}
+
+/* 상세 날씨 아이콘을 둥근 배경 위에 표시합니다. */
+.detail-icon {
+  display: grid; /* 아이콘을 가운데에 정렬합니다. */
+  width: 30px; /* 아이콘 배경 너비입니다. */
+  height: 30px; /* 아이콘 배경 높이입니다. */
+  place-items: center; /* 아이콘을 정가운데에 놓습니다. */
+  border-radius: 10px; /* 아이콘 배경 모서리를 둥글게 만듭니다. */
+  font-size: 0.95rem; /* 상세 아이콘 크기입니다. */
+  font-weight: 700; /* 아이콘을 선명하게 표시합니다. */
+}
+
+/* 체감온도 아이콘 배경 색상입니다. */
+.feels-icon {
+  background: #fff2df; /* 체감온도는 따뜻한 색으로 구분합니다. */
+  color: #e19a43; /* 체감온도 아이콘의 글자색입니다. */
+}
+
+/* 습도 아이콘 배경 색상입니다. */
+.humidity-icon {
+  background: #e9f4fc; /* 습도는 물을 떠올리는 파란색으로 구분합니다. */
+  color: #5a91c2; /* 습도 아이콘의 글자색입니다. */
+}
+
+/* 바람 아이콘 배경 색상입니다. */
+.wind-icon {
+  background: #edf1ff; /* 바람은 연한 보라색으로 구분합니다. */
+  color: #7181c4; /* 바람 아이콘의 글자색입니다. */
+}
+
+/* 대기질 아이콘 배경 색상입니다. */
+.air-icon {
+  background: #eaf5ed; /* 대기질은 연한 녹색으로 구분합니다. */
+  color: #5d9870; /* 대기질 아이콘의 글자색입니다. */
+}
+
+/* 상세 날씨 항목 이름을 표시합니다. */
+.detail-label {
+  margin: 12px 0 0; /* 아이콘 아래에 항목 이름을 둡니다. */
+  color: #929bab; /* 항목 이름을 보조 색상으로 표시합니다. */
+  font-size: 0.7rem; /* 항목 이름의 글자 크기입니다. */
+}
+
+/* 상세 날씨의 숫자 또는 상태 값을 강조합니다. */
+.detail-value {
+  margin: 5px 0 0; /* 항목 이름과 값 사이 여백입니다. */
+  color: #34425d; /* 날씨 값을 진하게 표시합니다. */
+  font-size: 1.08rem; /* 숫자와 상태를 읽기 쉽게 표시합니다. */
+  font-weight: 720; /* 중요한 날씨 값을 강조합니다. */
+  letter-spacing: -0.035em; /* 값 글자 사이를 다듬습니다. */
+}
+
+/* 상세 값의 의미를 초보자가 이해하도록 설명합니다. */
+.detail-hint {
+  margin: 4px 0 0; /* 값 아래에 설명을 배치합니다. */
+  color: #a1a9b5; /* 설명을 가장 낮은 강조 단계로 표시합니다. */
+  font-size: 0.66rem; /* 짧은 보조 설명의 크기입니다. */
+  line-height: 1.45; /* 설명이 줄바꿈될 때의 간격입니다. */
+}
+
+/* 오늘 예보를 상세 카드 아래에 배치합니다. */
+.forecast-section {
+  margin-top: 30px; /* 상세 날씨와 예보 사이 간격입니다. */
+}
+
+/* 오늘의 최저·최고 기온을 표시하는 한 줄 예보 카드입니다. */
+.daily-forecast {
+  display: flex; /* 예보 아이콘과 기온 정보를 한 줄에 둡니다. */
+  min-height: 90px; /* 예보 카드에 충분한 높이를 확보합니다. */
+  align-items: center; /* 예보 내용을 세로 가운데에 둡니다. */
+  justify-content: space-between; /* 날씨와 기온을 양끝으로 보냅니다. */
+  gap: 16px; /* 예보 요소 사이 간격을 둡니다. */
+  margin-top: 14px; /* 예보 제목 아래에 여백을 둡니다. */
+  padding: 17px 21px; /* 예보 카드 안쪽 여백을 둡니다. */
+  border: 1px solid #edf0f5; /* 예보 카드 테두리를 그립니다. */
+  border-radius: 16px; /* 예보 카드 모서리를 둥글게 만듭니다. */
+  background: #fff; /* 예보 카드 배경을 흰색으로 표시합니다. */
+}
+
+/* 오늘이라는 표시와 예보 상태를 한 묶음으로 배치합니다. */
+.forecast-condition {
+  display: flex; /* 예보 아이콘과 설명을 가로로 놓습니다. */
+  align-items: center; /* 예보 아이콘과 문구의 세로 위치를 맞춥니다. */
+  gap: 13px; /* 아이콘과 상태 설명 사이 간격입니다. */
+}
+
+/* 하루 예보의 날씨 아이콘 크기입니다. */
+.forecast-icon {
+  font-size: 1.75rem; /* 예보 아이콘을 눈에 잘 띄게 표시합니다. */
+}
+
+/* 예보의 날짜와 날씨 설명을 각각 한 줄에 표시합니다. */
+.forecast-day,
+.forecast-description {
+  display: block; /* 날짜와 상태 설명을 세로로 쌓습니다. */
+}
+
+/* 예보 날짜를 작게 표시합니다. */
+.forecast-day {
+  color: #9099a9; /* 날짜를 보조 색상으로 표시합니다. */
+  font-size: 0.7rem; /* 예보 날짜 글자 크기입니다. */
+}
+
+/* 예보 날씨 상태를 강조합니다. */
+.forecast-description {
+  margin-top: 4px; /* 날짜와 상태 사이 간격입니다. */
+  color: #44516a; /* 상태 설명을 진하게 표시합니다. */
+  font-size: 0.84rem; /* 예보 설명 글자 크기입니다. */
+  font-weight: 680; /* 상태 설명을 눈에 띄게 표시합니다. */
+}
+
+/* 예보의 최저·최고 기온과 강수 가능성을 나란히 배치합니다. */
+.forecast-temperatures {
+  display: flex; /* 기온과 비 가능성을 한 줄에 둡니다. */
+  align-items: center; /* 숫자와 라벨을 세로 가운데에 둡니다. */
+  gap: 16px; /* 예보 수치 사이 간격입니다. */
+}
+
+/* 최저·최고 기온의 숫자 크기를 지정합니다. */
+.forecast-range {
+  color: #44516a; /* 기온 숫자를 진한 색으로 표시합니다. */
+  font-size: 0.95rem; /* 예보 기온을 쉽게 읽도록 표시합니다. */
+  font-weight: 740; /* 예보 기온을 강조합니다. */
+  font-variant-numeric: tabular-nums; /* 숫자 폭을 일정하게 맞춥니다. */
+}
+
+/* 최저 기온은 최고 기온보다 부드러운 색으로 구분합니다. */
+.forecast-low {
+  margin-left: 7px; /* 최저·최고 기온 사이 간격입니다. */
+  color: #a1a9b5; /* 최저 기온을 연하게 표시합니다. */
+}
+
+/* 예보의 강수 가능성을 작은 파란 문구로 구분합니다. */
+.forecast-rain {
+  color: #6487b4; /* 강수 가능성을 다른 예보 값과 구분합니다. */
+  font-size: 0.72rem; /* 강수 확률 글자 크기입니다. */
+}
+
+/* 예보 정보가 없을 때 안내 문구를 표시합니다. */
+.forecast-empty {
+  margin: 0; /* 기본 여백을 제거합니다. */
+  color: #929bab; /* 안내 문구를 보조 색상으로 표시합니다. */
+  font-size: 0.8rem; /* 예보 없음 안내 글자 크기입니다. */
+}
+
+/* 예보 모델 자료가 현지 관측값과 다를 수 있음을 안내합니다. */
+.data-disclaimer {
+  margin: 14px 0 0; /* 카드와 고지 문구 사이 간격입니다. */
+  color: #a2aab7; /* 고지 문구를 작고 연하게 표시합니다. */
+  font-size: 0.68rem; /* 고지 문구의 글자 크기입니다. */
+  line-height: 1.5; /* 긴 고지 문구를 읽기 쉽게 줄 간격을 둡니다. */
+}
+
+/* 페이지 아래쪽에 서비스 사용 범위를 안내합니다. */
+.site-footer {
+  padding: 18px 0 24px; /* 푸터 위아래 여백을 둡니다. */
+  border-top: 1px solid #e8ebf2; /* 본문과 푸터를 선으로 구분합니다. */
+  color: #9aa3b1; /* 푸터 문구를 보조 색상으로 표시합니다. */
+  font-size: 0.7rem; /* 푸터 문구를 작게 표시합니다. */
+  text-align: center; /* 푸터 문구를 가운데 정렬합니다. */
+}
+
+/* 데이터 제공처 링크를 푸터 문구와 구분해 표시합니다. */
+.site-footer a {
+  color: #6478bb; /* Open-Meteo 링크를 페이지 강조 색상으로 표시합니다. */
+  font-weight: 700; /* 출처 링크를 알아보기 쉽게 합니다. */
+}
+
+/* 저장 공간 문제 등 공통 오류 안내를 화면 아래에 읽기 쉽게 표시합니다. */
+.page-message {
+  margin: 0 0 12px; /* 푸터와 안내 사이 간격을 둡니다. */
+  padding: 11px 14px; /* 안내 문구 주변에 여백을 둡니다. */
+  border: 1px solid #f0dfbd; /* 문제 안내를 따뜻한 테두리로 구분합니다. */
+  border-radius: 11px; /* 안내 상자의 모서리를 둥글게 만듭니다. */
+  background: #fffaf0; /* 문제 안내 배경을 연한 노란색으로 표시합니다. */
+  color: #80652f; /* 안내 문구를 읽기 쉽게 표시합니다. */
+  font-size: 0.78rem; /* 안내 문구의 크기를 설정합니다. */
+  line-height: 1.5; /* 안내가 여러 줄일 때 읽기 편하게 합니다. */
+}
+
+/* 보조 기술에는 읽히되 화면에서는 보이지 않는 레이블입니다. */
+.visually-hidden {
+  position: absolute; /* 화면 흐름 밖에서 레이블을 배치합니다. */
+  width: 1px; /* 레이블의 너비를 최소화합니다. */
+  height: 1px; /* 레이블의 높이를 최소화합니다. */
+  overflow: hidden; /* 화면에서 레이블 글자를 숨깁니다. */
+  clip: rect(0, 0, 0, 0); /* 오래된 브라우저에서도 시각적으로 숨깁니다. */
+  white-space: nowrap; /* 숨겨진 레이블이 줄바꿈되지 않게 합니다. */
+  clip-path: inset(50%); /* 현대 브라우저에서 레이블을 화면 밖으로 숨깁니다. */
+}
+
+/* 작은 노트북 화면에서는 여백과 카드 간격을 줄입니다. */
+@media (max-width: 1050px) {
+  .page-shell { width: min(100% - 44px, 900px); } /* 페이지 좌우 여백을 줄입니다. */
+  .app-layout { grid-template-columns: minmax(250px, 300px) minmax(0, 1fr); gap: 34px; } /* 좁은 화면에 맞게 두 영역을 재배치합니다. */
+  .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } /* 상세 날씨 카드를 두 열로 표시합니다. */
+}
+
+/* 태블릿과 작은 화면에서는 장소 도구를 위에 놓습니다. */
+@media (max-width: 720px) {
+  .page-shell { width: min(100% - 36px, 600px); } /* 화면 좌우 여백을 작게 조정합니다. */
+  .site-header { min-height: 76px; } /* 작은 화면에서 상단 바 높이를 줄입니다. */
+  .app-layout { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 32px 0 40px; } /* 장소 도구와 날씨를 세로로 쌓습니다. */
+  .sidebar { display: grid; grid-template-columns: minmax(0, 1fr); } /* 사이드바의 도구를 한 열로 표시합니다. */
+  .section-heading { margin-bottom: 18px; } /* 좁은 화면에서 제목 아래 간격을 줄입니다. */
+  .section-heading h1 br { display: none; } /* 작은 화면에서는 제목이 자연스럽게 이어지게 합니다. */
+  .map-section { margin-top: 24px; } /* 지도 위쪽 간격을 조금 줄입니다. */
+  .demo-map { height: 180px; } /* 작은 화면 지도 높이를 조정합니다. */
+  .favorites-section { margin-top: 22px; padding-top: 16px; } /* 관심 장소 섹션 여백을 줄입니다. */
+  .weather-area { padding-top: 0; } /* 날씨 영역의 위쪽 여백을 제거합니다. */
+  .empty-state { min-height: 310px; } /* 빈 상태 안내 높이를 작은 화면에 맞춥니다. */
+}
+
+/* 휴대폰 화면에서는 현재 날씨와 예보의 배치를 세로로 바꿉니다. */
+@media (max-width: 500px) {
+  .page-shell { width: min(100% - 28px, 440px); } /* 아주 작은 화면의 좌우 여백을 줄입니다. */
+  .demo-badge { gap: 6px; padding: 8px 9px; font-size: 0.66rem; } /* 상단 배지가 공간을 덜 차지하게 합니다. */
+  .brand { gap: 8px; } /* 작은 화면에서 로고 간격을 줄입니다. */
+  .brand-icon { width: 36px; height: 36px; border-radius: 12px; } /* 로고 아이콘 크기를 줄입니다. */
+  .brand strong { font-size: 0.9rem; } /* 서비스 이름을 조금 작게 표시합니다. */
+  .brand small { font-size: 0.64rem; } /* 서비스 설명을 조금 작게 표시합니다. */
+  .weather-header { align-items: flex-start; gap: 10px; } /* 제목과 저장 버튼을 위쪽에 맞춥니다. */
+  .favorite-toggle { gap: 5px; padding: 9px; font-size: 0.67rem; } /* 저장 버튼의 너비를 줄입니다. */
+  .current-weather-card { align-items: flex-start; flex-direction: column; gap: 20px; padding: 24px; } /* 날씨와 강수 안내를 세로로 쌓습니다. */
+  .rain-summary { width: 100%; } /* 강수 안내가 카드 너비를 사용하게 합니다. */
+  .detail-grid { gap: 9px; } /* 두 줄 상세 카드 사이 간격을 줄입니다. */
+  .detail-card { min-height: 140px; padding: 13px; } /* 상세 카드를 작은 화면 크기에 맞춥니다. */
+  .detail-hint { font-size: 0.62rem; } /* 상세 카드 보조 문구를 조금 줄입니다. */
+  .daily-forecast { align-items: flex-start; flex-direction: column; } /* 예보 날씨와 수치를 세로로 배치합니다. */
+  .forecast-temperatures { width: 100%; justify-content: space-between; } /* 예보 수치를 카드 양끝으로 배치합니다. */
+}
+
+/* 사용자가 동작 효과 줄이기를 설정했다면 움직임을 거의 없앱니다. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; } /* 애니메이션과 전환 시간을 최소화합니다. */
+}

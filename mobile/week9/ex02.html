@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>구구단 만들기</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 px-4 py-10 font-sans text-slate-800 sm:grid sm:place-items-center">
+  <main class="mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-300/50">
+    <div class="h-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
+    <div class="p-6 sm:p-10">
+      <div class="mb-7">
+        <p class="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold tracking-wide text-indigo-700">
+          <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
+          즐거운 수학 시간
+        </p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">구구단 만들기</h1>
+        <p class="mt-3 leading-relaxed text-slate-500">원하는 단을 입력하면 곱셈 결과를 한눈에 보여드려요.</p>
+      </div>
+
+      <form id="dan-form" class="flex flex-col gap-3 sm:flex-row">
+        <label for="dan" class="sr-only">만들 구구단</label>
+        <input
+          id="dan"
+          name="dan"
+          type="number"
+          min="2"
+          max="9"
+          step="1"
+          placeholder="몇 단을 만들까요? (2~9)"
+          required
+          class="min-h-12 min-w-0 flex-1 rounded-xl border border-slate-300 bg-slate-50 px-4 text-base outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100"
+        >
+        <button
+          type="submit"
+          class="min-h-12 rounded-xl bg-indigo-600 px-6 font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-200 active:scale-[.98]"
+        >
+          구구단 만들기
+        </button>
+      </form>
+      <p id="message" class="mt-3 min-h-6 text-sm font-medium text-rose-600" role="alert" aria-live="polite"></p>
+      <section id="result" class="mt-5" aria-live="polite" aria-atomic="true"></section>
+    </div>
+  </main>
+
+  <script>
+    const form = document.querySelector("#dan-form");
+    const input = document.querySelector("#dan");
+    const message = document.querySelector("#message");
+    const result = document.querySelector("#result");
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const dan = Number(input.value);
+
+      result.replaceChildren();
+      message.textContent = "";
+
+      if (!Number.isInteger(dan) || dan < 2 || dan > 9) {
+        message.textContent = "2부터 9까지의 정수를 입력해 주세요.";
+        input.focus();
+        return;
+      }
+
+      const heading = document.createElement("h2");
+      heading.textContent = `${dan}단`;
+      heading.className = "mb-4 text-xl font-bold text-slate-900";
+      const table = document.createElement("ol");
+      table.className = "grid grid-cols-1 gap-2 sm:grid-cols-2";
+
+      for (let multiplier = 1; multiplier <= 9; multiplier += 1) {
+        const row = document.createElement("li");
+        row.textContent = `${dan} × ${multiplier} = ${dan * multiplier}`;
+        row.className = "rounded-xl border border-indigo-100 bg-indigo-50/70 px-4 py-3 text-center font-semibold tabular-nums text-indigo-950 transition hover:border-indigo-200 hover:bg-indigo-100";
+        table.append(row);
+      }
+
+      result.append(heading, table);
+    });
+  </script>
+</body>
+</html>
