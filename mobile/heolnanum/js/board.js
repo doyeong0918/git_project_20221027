@@ -50,7 +50,8 @@ function renderRows(posts) {
   }
   listEl.innerHTML = posts.map(function (p) {
     return '<li class="board-row"><a class="board-title" href="post.html?id=' + encodeURIComponent(p.id) + '">' +
-      '<span class="badge">' + escapeHtml(categoryLabel(p.category)) + '</span><span class="t">' + escapeHtml(p.title) + "</span></a>" +
+      '<span class="badge">' + escapeHtml(categoryLabel(p.category)) + '</span><span class="t">' + escapeHtml(p.title) + "</span>" +
+      (p.commentCount ? '<span class="cmt-count" aria-label="댓글 ' + p.commentCount + '개">[' + p.commentCount + "]</span>" : "") + "</a>" +
       '<span class="board-meta">' + escapeHtml(p.author) + " · " + toDateStr(new Date(p.createdAt)) + "</span></li>";
   }).join("");
 }

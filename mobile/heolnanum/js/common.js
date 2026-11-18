@@ -22,7 +22,8 @@ var NAV_ITEMS = [
 /* 메뉴에는 안 넣지만 페이지 히어로(제목 띠)는 필요한 페이지 */
 var EXTRA_PAGES = [
   { id: "login",  label: "로그인",   title: "로그인",   tagline: "헌혈 기록과 기부 약속을 내 계정으로 관리해요", sub: [] },
-  { id: "signup", label: "회원가입", title: "회원가입", tagline: "이메일 하나로 헌혈나눔을 시작해 보세요",       sub: [] }
+  { id: "signup", label: "회원가입", title: "회원가입", tagline: "이메일 하나로 헌혈나눔을 시작해 보세요",       sub: [] },
+  { id: "admin",  label: "관리",     title: "관리자",   tagline: "도움 요청을 검수하고 혈액 보유량을 입력해요",  sub: [] }
 ];
 
 var RELATED_SITES = [
@@ -121,7 +122,7 @@ function applyFontSize(size) {
 /* ── 레이아웃 조각 ── */
 function buildUtilityBar() {
   return '<div class="utility-bar"><div class="inner">' +
-    '<span class="utility-note">학생 프로젝트 · 표시된 요청·보유량은 예시 데이터예요</span>' +
+    '<span class="utility-note">학생 프로젝트 · 혈액 보유량 출처: 대한적십자사 혈액관리본부</span>' +
     '<div class="fs-group" role="group" aria-label="글자 크기">' +
     '<button type="button" data-fs-btn="sm" aria-label="글자 작게">가-</button>' +
     '<button type="button" data-fs-btn="md" aria-label="글자 기본">가</button>' +

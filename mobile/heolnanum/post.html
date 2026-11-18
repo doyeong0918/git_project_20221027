@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헌혈나눔 - 게시글</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261118b">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
-<script src="js/supabase-config.js" defer></script>
-<script src="js/common.js" defer></script>
-<script src="js/auth.js" defer></script>
-<script src="js/db.js" defer></script>
-<script src="js/post.js" defer></script>
+<script src="js/supabase-config.js?v=20261118b" defer></script>
+<script src="js/common.js?v=20261118b" defer></script>
+<script src="js/auth.js?v=20261118b" defer></script>
+<script src="js/db.js?v=20261118b" defer></script>
+<script src="js/post.js?v=20261118b" defer></script>
 </head>
 <body data-page="board">
 
@@ -31,6 +31,20 @@
           <div class="owner" id="post-owner"></div>
         </div>
       </article>
+    </section>
+
+    <section id="comments" hidden>
+      <h2>댓글 <span class="comment-count" id="comment-count">0</span></h2>
+      <ul class="comment-list" id="comment-list"></ul>
+      <div id="comment-gate"></div>
+      <form id="comment-form" novalidate>
+        <div class="field">
+          <label for="cm-content" class="sr-only">댓글 내용</label>
+          <textarea id="cm-content" maxlength="1000" rows="3" placeholder="댓글을 남겨 주세요 (1000자 이내)"></textarea>
+        </div>
+        <div class="form-actions"><button type="submit" class="btn" id="cm-submit">댓글 등록</button></div>
+        <p id="cm-msg" class="form-msg error" role="alert"></p>
+      </form>
     </section>
 
   </div>

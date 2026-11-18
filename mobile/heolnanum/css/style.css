@@ -21,6 +21,7 @@
   --lv2: #c98a00;
   --lv3: #e8590c;
   --lv4: #d7263d;
+  --lv5: #7a0c1c;
   --r-lg: 1.25rem;
   --r-md: 0.875rem;
   --shadow: 0 6px 22px rgba(29, 36, 51, 0.08);
@@ -238,7 +239,34 @@ main.page { flex: 1; width: 100%; }
 .post-body { min-height: 6rem; white-space: pre-wrap; word-break: break-word; line-height: 1.8; }
 .post-actions { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
 .post-actions .owner { display: flex; gap: 0.5rem; }
-#write-gate:not(:empty), #post-gate:not(:empty) { margin-bottom: 1rem; }
+#write-gate:not(:empty), #post-gate:not(:empty), #comment-gate:not(:empty) { margin-bottom: 1rem; }
+.cmt-count { flex: none; color: var(--red); font-size: 0.85rem; font-weight: 800; }
+.comment-count { color: var(--red); }
+.comment-list { list-style: none; margin: 0 0 1.2rem; padding: 0; }
+.comment { padding: 0.9rem 0.2rem; border-bottom: 1px solid var(--line); }
+.comment:first-child { border-top: 1px solid var(--line); }
+.comment-head { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; font-size: 0.88rem; }
+.comment-date { color: var(--ink-sub); font-size: 0.78rem; }
+.comment-tools { margin-left: auto; display: flex; gap: 0.6rem; }
+.comment-tool { border: 0; padding: 0; background: none; color: var(--ink-sub); font: inherit; font-size: 0.78rem; cursor: pointer; text-decoration: underline; }
+.comment-tool:hover { color: var(--red); }
+.comment-edit { margin-top: 0.5rem; }
+.comment-edit textarea { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #cfd4df; border-radius: 0.65rem; font: inherit; font-size: 0.93rem; resize: vertical; }
+.comment-edit textarea:focus { outline: 3px solid rgba(215, 38, 61, 0.25); border-color: var(--red); }
+.comment-edit-actions { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
+.comment-edit-msg:empty { display: none; }
+.comment-body { margin-top: 0.35rem; white-space: pre-wrap; word-break: break-word; line-height: 1.7; font-size: 0.93rem; }
+.comment-list .empty { margin-bottom: 0.2rem; }
+
+/* ── 관리자 / 기부 요청 상태 ── */
+.badge-ok { background: #e3f6ea; color: #17733f; }
+.badge-no { background: #f1f2f5; color: #6b7280; }
+.admin-story { margin-top: 0.35rem; padding: 0.5rem 0.7rem; border-radius: 0.5rem; background: var(--bg); font-size: 0.85rem; white-space: pre-wrap; word-break: break-word; }
+.req-story { margin: 0; font-size: 0.82rem; color: var(--ink-sub); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; }
+.stock-date { margin-top: 0.35rem; font-size: 0.75rem; color: var(--ink-sub); }
+.notice-list a.title { color: var(--ink); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notice-list a.title:hover { color: var(--red); text-decoration: underline; }
+.notice-list .empty { border: 0; padding: 0.6rem 0; text-align: left; }
 #write-form textarea { min-height: 14rem; }
 
 /* ── 홈: 슬라이드 배너 (혈액관리본부의 비주얼 배너 구조를 참고) ── */
@@ -307,10 +335,12 @@ main.page { flex: 1; width: 100%; }
 .lv-2 { background: var(--lv2); }
 .lv-3 { background: var(--lv3); }
 .lv-4 { background: var(--lv4); }
+.lv-5 { background: var(--lv5); }
 .s-1 { stroke: var(--lv1); }
 .s-2 { stroke: var(--lv2); }
 .s-3 { stroke: var(--lv3); }
 .s-4 { stroke: var(--lv4); }
+.s-5 { stroke: var(--lv5); }
 .mytype-row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.2rem; font-size: 0.9rem; }
 .mytype-row label { font-weight: 800; }
 .mytype-row select { padding: 0.5rem 0.8rem; border: 1px solid #cfd4df; border-radius: 999px; font: inherit; background: #fff; }

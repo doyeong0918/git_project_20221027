@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>헌혈나눔 - 관리</title>
+<link rel="stylesheet" href="css/style.css?v=20261118b">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
+<script src="js/supabase-config.js?v=20261118b" defer></script>
+<script src="js/common.js?v=20261118b" defer></script>
+<script src="js/auth.js?v=20261118b" defer></script>
+<script src="js/db.js?v=20261118b" defer></script>
+<script src="js/admin.js?v=20261118b" defer></script>
+</head>
+<body data-page="admin">
+
+<main class="page">
+  <div class="content">
+
+    <div id="admin-gate"></div>
+
+    <section id="review" hidden>
+      <h2>도움 요청 검수</h2>
+      <p class="lead" style="margin-bottom:1rem">승인한 요청만 기부 요청 목록에 공개돼요. 금전 거래 요구, 개인정보(실명·연락처·병원명)가 담긴 요청은 반려해 주세요.</p>
+      <h3 style="margin-bottom:0.6rem">검수 대기</h3>
+      <ul id="pending-list" class="simple-list"></ul>
+      <h3 style="margin:1.4rem 0 0.6rem">처리한 요청</h3>
+      <ul id="done-list" class="simple-list"></ul>
+    </section>
+
+    <section id="stock" hidden>
+      <h2>혈액 보유량 입력</h2>
+      <p class="lead" style="margin-bottom:1rem">
+        <a href="https://www.bloodinfo.net/knrcbs/bi/info/bldHoldSttus.do?mi=1046" target="_blank" rel="noopener">혈액관리본부 혈액보유현황</a>의
+        혈액형별 <strong>보유일수</strong>를 옮겨 적어 주세요. 같은 기준일로 다시 저장하면 덮어써요.
+      </p>
+      <form id="stock-form" class="card" novalidate>
+        <div class="form-grid">
+          <div class="field full">
+            <label for="st-date">기준일</label>
+            <input id="st-date" type="date">
+          </div>
+          <div class="field"><label for="st-A">A형 (일분)</label><input id="st-A" type="number" min="0" max="99" step="0.1" inputmode="decimal"></div>
+          <div class="field"><label for="st-B">B형 (일분)</label><input id="st-B" type="number" min="0" max="99" step="0.1" inputmode="decimal"></div>
+          <div class="field"><label for="st-O">O형 (일분)</label><input id="st-O" type="number" min="0" max="99" step="0.1" inputmode="decimal"></div>
+          <div class="field"><label for="st-AB">AB형 (일분)</label><input id="st-AB" type="number" min="0" max="99" step="0.1" inputmode="decimal"></div>
+        </div>
+        <div class="form-actions"><button type="submit" class="btn">저장</button></div>
+        <p id="st-msg" class="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>

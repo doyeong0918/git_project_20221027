@@ -46,6 +46,17 @@ function renderAuthLinks(user) {
   var name = (user.user_metadata && user.user_metadata.nickname) || (user.email || "").split("@")[0] || "회원";
   box.innerHTML = '<span class="auth-user">' + escapeHtml(name) + '님</span>' +
     '<button type="button" id="logout-btn">로그아웃</button>';
+  /* onAuthStateChange 콜백 안에서도 불리므로, DB 확인은 콜백이 끝난 뒤(setTimeout)에 한다 */
+  setTimeout(showAdminLink, 0);
+}
+
+/* 관리자에게만 유틸바에 "관리" 링크를 보여준다 (DB 함수 is_admin 이 없거나 실패하면 그냥 안 보임) */
+function showAdminLink() {
+  hnClient.rpc("is_admin").then(function (res) {
+    var box = document.getElementById("auth-links");
+    if (res.data !== true || !box || !box.querySelector("#logout-btn") || box.querySelector(".admin-link")) return;
+    box.insertAdjacentHTML("afterbegin", '<a class="admin-link" href="admin.html">관리</a>');
+  });
 }
 
 function initAuthBar() {

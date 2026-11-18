@@ -1,15 +1,17 @@
-/* 혈액 현황: 대시보드(도넛 + 혈액형별 막대)와 "내 혈액형" 선택 — 데이터와 단계 기준은 data.js */
+/* 혈액 현황: 대시보드(도넛 + 혈액형별 막대)와 "내 혈액형" 선택
+   — 보유량은 관리자가 입력한 최신 값(db.js), 단계 기준은 data.js 의 levelOf */
 var dashEl = document.getElementById("stock-dash");
 var mySelect = document.getElementById("my-type");
 var myMsg = document.getElementById("my-type-msg");
+var stock = null;
 
 mySelect.value = loadJson(MYTYPE_KEY, "");
 
 function render() {
-  renderStockDash(dashEl);
+  renderStockDash(dashEl, stock);
 
   var mine = mySelect.value;
-  var found = STOCK.filter(function (s) { return s.type === mine; })[0];
+  var found = stock && stock.items.filter(function (s) { return s.type === mine; })[0];
   if (!found) { myMsg.innerHTML = ""; return; }
   var lv = levelOf(found.days);
   myMsg.innerHTML = lv.n >= 3
@@ -22,4 +24,15 @@ mySelect.addEventListener("change", function () {
   render();
 });
 
-render();
+var unavailable = authUnavailableMessage();
+if (unavailable) {
+  dashEl.innerHTML = noticeHtml(unavailable);
+} else {
+  dashEl.innerHTML = '<div class="empty" style="grid-column:1/-1">불러오는 중…</div>';
+  dbLatestStock().then(function (s) {
+    stock = s;
+    render();
+  }).catch(function (err) {
+    dashEl.innerHTML = noticeHtml(dbErrorText(err));
+  });
+}

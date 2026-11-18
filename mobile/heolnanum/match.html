@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헌혈나눔 - 기부 매칭</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261118b">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
-<script src="js/supabase-config.js" defer></script>
-<script src="js/common.js" defer></script>
-<script src="js/auth.js" defer></script>
-<script src="js/db.js" defer></script>
-<script src="js/data.js" defer></script>
-<script src="js/match.js" defer></script>
+<script src="js/supabase-config.js?v=20261118b" defer></script>
+<script src="js/common.js?v=20261118b" defer></script>
+<script src="js/auth.js?v=20261118b" defer></script>
+<script src="js/db.js?v=20261118b" defer></script>
+<script src="js/data.js?v=20261118b" defer></script>
+<script src="js/match.js?v=20261118b" defer></script>
 </head>
 <body data-page="match">
 
@@ -30,8 +30,8 @@
       </ol>
       <p class="hint">위 내용은 한국백혈병어린이재단의 헌혈증 기증 안내를 참고해 정리한 일반 가이드예요. 기관마다 기준이 다를 수 있으니 실제로 보내기 전에 해당 기관 안내를 확인하세요.</p>
       <div class="notice" style="margin-top:1rem">
-        <strong>안내</strong> · 아래 요청은 화면 구성을 보여주기 위한 <strong>예시 데이터</strong>예요.
-        실제 서비스에서는 요청 검수(증빙 확인)를 거친 요청만 공개할 예정이에요.
+        <strong>안내</strong> · 아래 목록에는 회원이 남긴 도움 요청 중 <strong>관리자 검수를 거친 요청만</strong> 공개돼요.
+        진행률은 모든 회원의 기부 약속을 합친 값이에요.
       </div>
     </section>
 
@@ -85,6 +85,13 @@
           <div class="field">
             <label for="rf-need">필요한 헌혈증 (장)</label>
             <input id="rf-need" type="number" min="1" max="100" value="5">
+          </div>
+          <div class="field">
+            <label for="rf-urgent">긴급도</label>
+            <select id="rf-urgent">
+              <option value="normal">일반</option>
+              <option value="high">긴급 (곧 필요해요)</option>
+            </select>
           </div>
           <div class="field full">
             <label for="rf-story">사연 (선택)</label>

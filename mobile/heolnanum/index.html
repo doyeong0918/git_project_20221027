@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헌혈나눔 - 홈</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20261118b">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.js" defer></script>
-<script src="js/supabase-config.js" defer></script>
-<script src="js/common.js" defer></script>
-<script src="js/auth.js" defer></script>
-<script src="js/db.js" defer></script>
-<script src="js/data.js" defer></script>
-<script src="js/mouseevent.js" defer></script>
-<script src="js/home.js" defer></script>
+<script src="js/supabase-config.js?v=20261118b" defer></script>
+<script src="js/common.js?v=20261118b" defer></script>
+<script src="js/auth.js?v=20261118b" defer></script>
+<script src="js/db.js?v=20261118b" defer></script>
+<script src="js/data.js?v=20261118b" defer></script>
+<script src="js/mouseevent.js?v=20261118b" defer></script>
+<script src="js/home.js?v=20261118b" defer></script>
 </head>
 <body data-page="home">
 
@@ -78,15 +78,15 @@
       <h2>헌혈나눔은 이런 곳이에요</h2>
       <p class="lead" style="margin-bottom:1.3rem">헌혈증을 나누고 싶은 사람과 필요한 사람을 잇고, 헌혈하는 사람이 다음 헌혈 시기와 혈액 현황을 놓치지 않도록 돕는 서비스예요.</p>
       <div class="stat-band">
-        <div><div class="num" id="hs-open">-</div><div class="lbl">진행 중인 요청 <span class="sample-tag">예시</span></div></div>
-        <div><div class="num" id="hs-got">-</div><div class="lbl">모인 헌혈증(장) <span class="sample-tag">예시</span></div></div>
-        <div><div class="num" id="hs-done">-</div><div class="lbl">목표 달성 요청 <span class="sample-tag">예시</span></div></div>
+        <div><div class="num" id="hs-open">-</div><div class="lbl">진행 중인 요청</div></div>
+        <div><div class="num" id="hs-got">-</div><div class="lbl">모인 헌혈증(장)</div></div>
+        <div><div class="num" id="hs-done">-</div><div class="lbl">목표 달성 요청</div></div>
       </div>
     </section>
 
     <section id="urgent">
       <div class="sec-head">
-        <h2>긴급 기부 요청 <span class="sample-tag">예시</span></h2>
+        <h2>긴급 기부 요청</h2>
         <a class="more-link" href="match.html#requests">전체 보기 +</a>
       </div>
       <div id="urgent-list" class="req-list"></div>
@@ -94,7 +94,7 @@
 
     <section id="stockdash">
       <div class="sec-head">
-        <h2>오늘의 혈액 보유 <span class="sample-tag">예시</span></h2>
+        <h2>혈액 보유 현황</h2>
         <a class="more-link" href="status.html">자세히 보기 +</a>
       </div>
       <div id="stock-dash" class="dash"></div>
@@ -110,7 +110,10 @@
     </section>
 
     <section id="notices">
-      <h2>새소식 <span class="sample-tag">예시</span></h2>
+      <div class="sec-head">
+        <h2>게시판 새 글</h2>
+        <a class="more-link" href="board.html">전체 보기 +</a>
+      </div>
       <ul class="notice-list" id="notice-list"></ul>
     </section>
 
